@@ -4,58 +4,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATS-Optimized Resume Builder - Rishabh Bairagi</title>
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@900&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS CDN -->
+    <title>RSB Studio — Resume Builder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700;900&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600;700&family=Lato:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @media print {
-            body {
-                background: white;
-                margin: 0;
-                padding: 0;
-                overflow: visible !important;
-            }
-
-            .no-print {
-                display: none !important;
-            }
-
-            .print-area {
-                width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                box-shadow: none !important;
-            }
-
-            #app-container {
-                height: auto !important;
-                overflow: visible !important;
-                display: block !important;
-            }
-
-            #preview-container {
-                overflow: visible !important;
-                height: auto !important;
-            }
-
-            /* Print background color and watermark support */
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
+        /* ============================= DESIGN TOKENS ============================= */
+        :root {
+            --edit-bg: #FAFAF9;
+            --edit-surface: #FFFFFF;
+            --edit-surface-2: #F4F4F3;
+            --edit-border: #E7E5E2;
+            --edit-text: #1C1B1A;
+            --edit-text-dim: #6B6963;
+            --edit-text-faint: #A8A6A0;
+            --accent: #3457D5;
+            --accent-dim: #3457D51a;
+            --accent-text: #ffffff;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --shadow-sm: 0 1px 2px rgba(20, 20, 15, .04), 0 1px 1px rgba(20, 20, 15, .03);
+            --shadow-md: 0 8px 24px -8px rgba(20, 20, 15, .14), 0 2px 6px -2px rgba(20, 20, 15, .06);
+            --shadow-lg: 0 24px 60px -18px rgba(20, 20, 15, .28);
+            --pv-font: 'Calibri', 'Arial', sans-serif;
+            --pv-size: 10.5pt;
+            --pv-line: 1.42;
+            --pv-sec-gap: 14px;
+            --pv-margin: 16mm;
+            --pv-heading: normal;
         }
 
-        .resume-page {
-            font-family: 'Calibri', 'Arial', 'Helvetica', sans-serif;
-            line-height: 1.4;
-            color: #111111;
-            position: relative;
+        [data-theme="dark"] {
+            --edit-bg: #0B0C0E;
+            --edit-surface: #141518;
+            --edit-surface-2: #1B1D21;
+            --edit-border: #26282D;
+            --edit-text: #EDEDEC;
+            --edit-text-dim: #9A9CA3;
+            --edit-text-faint: #5C5E64;
         }
 
-        /* Custom subtle scrollbar */
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            background: var(--edit-bg);
+            color: var(--edit-text);
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .brandmark {
+            font-family: 'League Spartan', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: #fff;
+        }
+
         .custom-scroll::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
+            height: 8px;
         }
 
         .custom-scroll::-webkit-scrollbar-track {
@@ -63,422 +88,1732 @@
         }
 
         .custom-scroll::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
+            background: var(--edit-border);
+            border-radius: 8px;
         }
 
         .custom-scroll::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+            background: var(--edit-text-faint);
         }
 
-        /* RSB Brand Mark Styling */
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* Surfaces */
+        .surface {
+            background: var(--edit-surface);
+            border: 1px solid var(--edit-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .chip {
+            border: 1px solid var(--edit-border);
+            background: var(--edit-surface-2);
+            color: var(--edit-text-dim);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            border-radius: var(--radius-sm);
+            padding: 8px 14px;
+            transition: all .15s ease;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, .05), 0 4px 10px -4px var(--accent);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.07);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--edit-text-dim);
+            border: 1px solid transparent;
+        }
+
+        .btn-ghost:hover {
+            background: var(--edit-surface-2);
+            color: var(--edit-text);
+        }
+
+        .btn-outline {
+            background: var(--edit-surface);
+            color: var(--edit-text);
+            border: 1px solid var(--edit-border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--edit-text-faint);
+        }
+
+        .icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            color: var(--edit-text-dim);
+            transition: .15s;
+        }
+
+        .icon-btn:hover {
+            background: var(--edit-surface-2);
+            color: var(--edit-text);
+        }
+
+        .icon-btn.danger:hover {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Inputs — floating label style */
+        .field {
+            position: relative;
+        }
+
+        .field input,
+        .field textarea,
+        .field select {
+            width: 100%;
+            background: var(--edit-surface);
+            border: 1.5px solid var(--edit-border);
+            border-radius: 10px;
+            padding: 14px 12px 6px 12px;
+            font-size: 13.5px;
+            color: var(--edit-text);
+            transition: border-color .15s, box-shadow .15s;
+            font-family: inherit;
+        }
+
+        .field select {
+            padding: 10px 12px;
+        }
+
+        .field textarea {
+            padding-top: 16px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .field input:focus,
+        .field textarea:focus,
+        .field select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-dim);
+            outline: none;
+        }
+
+        .field label {
+            position: absolute;
+            left: 12px;
+            top: 11px;
+            font-size: 13.5px;
+            color: var(--edit-text-faint);
+            pointer-events: none;
+            transition: .14s ease;
+            background: transparent;
+        }
+
+        .field input:focus+label,
+        .field input:not(:placeholder-shown)+label,
+        .field textarea:focus+label,
+        .field textarea:not(:placeholder-shown)+label {
+            top: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: .02em;
+            color: var(--accent);
+        }
+
+        .field.has-icon input {
+            padding-left: 36px;
+        }
+
+        .field .fld-icon {
+            position: absolute;
+            left: 11px;
+            top: 14px;
+            width: 15px;
+            height: 15px;
+            color: var(--edit-text-faint);
+            pointer-events: none;
+        }
+
+        .field-plain label {
+            position: static;
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            color: var(--edit-text-dim);
+            margin-bottom: 6px;
+        }
+
+        .field-plain input,
+        .field-plain select,
+        .field-plain textarea {
+            padding: 10px 12px;
+        }
+
+        .counter {
+            font-size: 10.5px;
+            color: var(--edit-text-faint);
+            text-align: right;
+            margin-top: 2px;
+        }
+
+        .counter.warn {
+            color: #d97706;
+        }
+
+        /* checkbox */
+        .chk {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--edit-text-dim);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .chk input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        /* Cards / sections */
+        .item-card {
+            background: var(--edit-surface);
+            border: 1px solid var(--edit-border);
+            border-radius: var(--radius-md);
+            transition: box-shadow .15s, border-color .15s;
+        }
+
+        .item-card:hover {
+            box-shadow: var(--shadow-sm);
+        }
+
+        .item-card.dragging {
+            opacity: .4;
+        }
+
+        .item-card .drag-handle {
+            cursor: grab;
+            color: var(--edit-text-faint);
+        }
+
+        .item-card .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 10px;
+            border-radius: 99px;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--edit-text-dim);
+            cursor: pointer;
+            transition: .12s;
+        }
+
+        .sidebar-item:hover {
+            background: var(--edit-surface-2);
+            color: var(--edit-text);
+        }
+
+        .sidebar-item.active {
+            background: var(--accent-dim);
+            color: var(--accent);
+        }
+
+        .sidebar-item .drag-handle {
+            opacity: 0;
+            transition: .12s;
+        }
+
+        .sidebar-item:hover .drag-handle {
+            opacity: 1;
+        }
+
+        .section-block {
+            scroll-margin-top: 14px;
+        }
+
+        .collapse-caret {
+            transition: transform .18s ease;
+        }
+
+        .collapsed .collapse-caret {
+            transform: rotate(-90deg);
+        }
+
+        .collapse-body {
+            overflow: hidden;
+            transition: grid-template-rows .22s ease;
+            display: grid;
+            grid-template-rows: 1fr;
+        }
+
+        .collapsed .collapse-body {
+            grid-template-rows: 0fr;
+        }
+
+        .collapse-inner {
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        /* Toast */
+        #toast-wrap {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .toast {
+            background: var(--edit-text);
+            color: var(--edit-bg);
+            font-size: 12.5px;
+            font-weight: 600;
+            padding: 9px 16px;
+            border-radius: 99px;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transform: translateY(8px);
+            transition: all .25s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Modal */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 8, .55);
+            backdrop-filter: blur(2px);
+            z-index: 150;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .18s;
+        }
+
+        .modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: var(--edit-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            transform: scale(.96);
+            transition: transform .18s;
+        }
+
+        .modal-backdrop.open .modal-box {
+            transform: scale(1);
+        }
+
+        /* Save status pill */
+        .save-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 99px;
+            background: #22c55e;
+        }
+
+        .save-dot.saving {
+            background: #f59e0b;
+            animation: pulse 1s infinite;
+        }
+
+        .save-dot.dirty {
+            background: #ef4444;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .35
+            }
+        }
+
+        /* Zoom preview stage - Fixed Transform Scaling Bounds */
+        #preview-stage {
+            transform-origin: top center;
+            transition: transform .18s ease;
+            margin: 0 auto;
+            width: 210mm;
+        }
+
+        .page-shadow {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 20px 50px -20px rgba(0, 0, 0, .28);
+        }
+
+        /* Score ring */
+        .score-ring circle {
+            transition: stroke-dashoffset .5s ease;
+        }
+
+        /* Resume page - ATS SAFE styling only */
+        .resume-page {
+            font-family: var(--pv-font);
+            font-size: var(--pv-size);
+            line-height: var(--pv-line);
+            color: #161616;
+            padding: var(--pv-margin);
+            width: 210mm;
+            min-height: 297mm;
+            position: relative;
+            background: #ffffff;
+        }
+
+        .resume-page h1.rname {
+            letter-spacing: .02em;
+        }
+
+        .resume-page .rsec {
+            margin-bottom: var(--pv-sec-gap);
+        }
+
+        .resume-page .rsec h2 {
+            font-size: 1.02em;
+            letter-spacing: .06em;
+        }
+
+        .resume-page ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        .resume-page li {
+            margin-left: 1.1em;
+            padding-left: .1em;
+        }
+
         .brand-watermark {
             font-family: "League Spartan", sans-serif;
-            font-size: 220px;
+            font-size: 230px;
             font-weight: 900;
-            letter-spacing: -0.08em;
+            letter-spacing: -0.06em;
             color: #0f172a;
-            opacity: 0.03;
-            transform: rotate(-12deg);
+            opacity: .028;
+            transform: rotate(-14deg);
             user-select: none;
+            pointer-events: none;
+        }
+
+        /* ---- Template skins ---- */
+        [data-tpl="classic"] .rname {
+            text-align: center;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        [data-tpl="classic"] .rheader {
+            text-align: center;
+            border-bottom: 1.5px solid #222;
+            padding-bottom: 12px;
+        }
+
+        [data-tpl="classic"] .rsec h2 {
+            text-align: left;
+            border-bottom: 1px solid #999;
+            padding-bottom: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        [data-tpl="modern"] .rheader {
+            border-bottom: none;
+            padding-bottom: 8px;
+        }
+
+        [data-tpl="modern"] .rname {
+            font-weight: 800;
+            color: #161616;
+        }
+
+        [data-tpl="modern"] .rsec h2 {
+            color: var(--rv-accent);
+            border-bottom: 2px solid var(--rv-accent);
+            padding-bottom: 5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        [data-tpl="minimal"] .rheader {
+            border-bottom: none;
+            padding-bottom: 4px;
+        }
+
+        [data-tpl="minimal"] .rname {
+            font-weight: 600;
+            letter-spacing: .03em;
+        }
+
+        [data-tpl="minimal"] .rsec h2 {
+            font-weight: 600;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: #555;
+            border: none;
+            font-size: .85em;
+        }
+
+        [data-tpl="minimal"] .rsec {
+            margin-bottom: calc(var(--pv-sec-gap) + 4px);
+        }
+
+        [data-tpl="executive"] .rheader {
+            border-bottom: 3px double #222;
+            padding-bottom: 10px;
+        }
+
+        [data-tpl="executive"] .rname {
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        [data-tpl="executive"] .rsec h2 {
+            font-weight: 800;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            border-left: 4px solid var(--rv-accent);
+            padding-left: 8px;
+        }
+
+        [data-tpl="technical"] .resume-page {
+            font-size: calc(var(--pv-size) - .8pt);
+        }
+
+        [data-tpl="technical"] .rheader {
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
+        }
+
+        [data-tpl="technical"] .rname {
+            font-weight: 700;
+        }
+
+        [data-tpl="technical"] .rsec h2 {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: .92em;
+            color: #222;
+            border-bottom: 1px dashed #999;
+            padding-bottom: 3px;
+        }
+
+        [data-tpl="technical"] .rsec {
+            margin-bottom: calc(var(--pv-sec-gap) - 4px);
+        }
+
+        [data-tpl="corporate"] .rheader {
+            background: var(--rv-accent-08);
+            padding: 14px 16px;
+            border-bottom: none;
+            margin: calc(var(--pv-margin) * -1) calc(var(--pv-margin) * -1) 14px calc(var(--pv-margin) * -1);
+            width: calc(100% + var(--pv-margin) * 2);
+            padding-left: var(--pv-margin);
+            padding-right: var(--pv-margin);
+        }
+
+        [data-tpl="corporate"] .rname {
+            font-weight: 800;
+            color: #161616;
+        }
+
+        [data-tpl="corporate"] .rsec h2 {
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--rv-accent);
+            border-bottom: 1px solid var(--rv-accent);
+            padding-bottom: 4px;
+        }
+
+        [data-tpl="academic"] .resume-page {
+            font-family: 'Times New Roman', Georgia, serif;
+        }
+
+        [data-tpl="academic"] .rheader {
+            text-align: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        [data-tpl="academic"] .rname {
+            font-weight: 700;
+            text-transform: none;
+            font-size: 1.5em;
+        }
+
+        [data-tpl="academic"] .rsec h2 {
+            font-weight: 700;
+            font-style: italic;
+            border-bottom: 1px solid #666;
+            padding-bottom: 3px;
+        }
+
+        [data-tpl="creative"] .rheader {
+            border-bottom: none;
+            padding-bottom: 6px;
+        }
+
+        [data-tpl="creative"] .rname {
+            font-weight: 800;
+            color: var(--rv-accent);
+        }
+
+        [data-tpl="creative"] .rsec h2 {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            position: relative;
+            padding-left: 14px;
+        }
+
+        [data-tpl="creative"] .rsec h2::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 2px;
+            width: 6px;
+            height: 6px;
+            background: var(--rv-accent);
+            border-radius: 99px;
+        }
+
+        @media print {
+            body {
+                background: #fff;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .print-area {
+                box-shadow: none !important;
+                border: none !important;
+                width: 100% !important;
+                margin: 0 !important;
+                transform: none !important;
+            }
+
+            #app-root {
+                display: block !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            #preview-scroll {
+                overflow: visible !important;
+                height: auto !important;
+                padding: 0 !important;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .resume-page {
+                min-height: 0 !important;
+            }
+
+            .item-card,
+            .rsec {
+                break-inside: avoid;
+            }
         }
     </style>
 </head>
 
-<body class="bg-gray-100 text-gray-800 h-screen overflow-hidden flex flex-col">
+<body class="h-screen overflow-hidden flex flex-col" data-theme="light">
 
-    <!-- App Bar -->
-    <header
-        class="bg-slate-900 text-white py-4 px-6 no-print shadow-md flex justify-between items-center shrink-0 h-[65px]">
-        <div>
-            <h1 class="text-xl font-bold tracking-wide">ATS Resume Builder</h1>
-            <p class="text-xs text-slate-400">Clean, ATS-Friendly Layout Generator</p>
+    <!-- ============================= TOP NAV ============================= -->
+    <header class="no-print shrink-0 h-14 flex items-center justify-between px-4 border-b"
+        style="border-color:var(--edit-border); background:var(--edit-surface);">
+        <div class="flex items-center gap-3 min-w-0">
+            <div class="brandmark text-xl leading-none" style="color:var(--accent);">RSB</div>
+            <div class="w-px h-6" style="background:var(--edit-border);"></div>
+            <input id="resume-name-input"
+                class="font-medium text-sm bg-transparent outline-none border border-transparent hover:border-[var(--edit-border)] focus:border-[var(--accent)] rounded-md px-2 py-1 min-w-0"
+                style="width:180px;" value="Untitled Resume"
+                oninput="Store.set('meta.resumeName', this.value); Toast.saving();">
+            <button class="icon-btn" title="Undo (Ctrl+Z)" onclick="History.undo()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 7v6h6" />
+                    <path d="M21 17a9 9 0 0 0-15-6.7L3 13" />
+                </svg>
+            </button>
+            <button class="icon-btn" title="Redo (Ctrl+Shift+Z)" onclick="History.redo()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 7v6h-6" />
+                    <path d="M3 17a9 9 0 0 1 15-6.7L21 13" />
+                </svg>
+            </button>
+            <div id="save-status" class="hidden sm:flex items-center gap-2 text-xs font-medium ml-1"
+                style="color:var(--edit-text-dim);">
+                <span class="save-dot" id="save-dot"></span><span id="save-text">Saved</span>
+            </div>
         </div>
-        <button onclick="window.print()"
-            class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition duration-200 text-sm shadow">
-            Export to PDF / Print
-        </button>
+
+        <div class="flex items-center gap-2">
+            <div class="hidden md:flex items-center gap-1 chip rounded-full px-1 py-1 text-xs">
+                <button class="icon-btn" title="Toggle theme" onclick="UI.toggleTheme()">
+                    <svg id="theme-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <circle cx="12" cy="12" r="4" />
+                        <path
+                            d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+                    </svg>
+                </button>
+            </div>
+            <button class="btn btn-ghost" onclick="Modal.open('settings')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+                Design
+            </button>
+            <button class="btn btn-outline" onclick="Modal.open('io')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <path d="M7 10l5 5 5-5" />
+                    <path d="M12 15V3" />
+                </svg>
+                Import/Export
+            </button>
+            <button class="btn btn-primary" onclick="window.print()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9V2h12v7" />
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                    <path d="M6 14h12v8H6z" />
+                </svg>
+                Export PDF
+            </button>
+        </div>
     </header>
 
-    <!-- Main Workspace (Locked Height Screen Layout) -->
-    <div id="app-container"
-        class="max-w-[1600px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 h-[calc(100vh-65px)] overflow-hidden">
+    <!-- ============================= APP BODY ============================= -->
+    <div id="app-root" class="flex-1 flex overflow-hidden">
 
-        <!-- FORM EDITOR SIDEBAR (LEFT) -->
-        <div
-            class="lg:col-span-5 bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-6 h-full overflow-y-auto custom-scroll no-print">
-            <h2 class="text-lg font-bold border-b pb-2 text-slate-800">Resume Details</h2>
-
-            <!-- Brand Watermark Settings -->
-            <section class="p-3 bg-slate-50 border rounded-md space-y-3">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">RSB Brand Watermark</h3>
-                    <span class="text-[10px] bg-blue-100 text-blue-800 font-semibold px-2 py-0.5 rounded">Faint 3%
-                        Opacity</span>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-xs text-gray-500 block mb-1">Brand Text</label>
-                        <input type="text" id="in-watermark-text" value="RSB" placeholder="Brand Code"
-                            class="w-full border p-1.5 text-xs rounded outline-none focus:ring-1 focus:ring-blue-500 uppercase font-bold"
-                            oninput="updateResume()">
-                    </div>
-                    <div>
-                        <label class="text-xs text-gray-500 block mb-1">Brand Color</label>
-                        <div class="flex items-center space-x-2">
-                            <input type="color" id="in-watermark-color" value="#0f172a"
-                                class="h-8 w-12 border p-0.5 rounded cursor-pointer" oninput="updateResume()">
-                            <span id="color-hex-label" class="text-xs font-mono text-gray-600">#0f172a</span>
-                        </div>
+        <!-- LEFT: Section navigator -->
+        <aside class="no-print w-[248px] shrink-0 border-r flex flex-col"
+            style="border-color:var(--edit-border); background:var(--edit-surface);">
+            <div class="px-4 pt-4 pb-2 flex items-center justify-between">
+                <span class="text-[11px] font-bold uppercase tracking-wider"
+                    style="color:var(--edit-text-faint);">Sections</span>
+                <div class="relative">
+                    <button class="icon-btn" onclick="UI.toggleAddMenu()" title="Add section">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.2">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                    </button>
+                    <div id="add-section-menu" class="hidden absolute right-0 top-9 z-30 surface p-1.5 w-52">
+                        <div class="text-[10px] font-bold uppercase tracking-wider px-2 py-1.5"
+                            style="color:var(--edit-text-faint);">Add a section</div>
+                        <div id="add-section-list"></div>
                     </div>
                 </div>
+            </div>
+            <nav id="sidebar-nav" class="flex-1 overflow-y-auto custom-scroll px-3 pb-4 space-y-0.5"></nav>
+            <div class="p-3 border-t" style="border-color:var(--edit-border);">
+                <button class="btn btn-ghost w-full justify-center text-xs" onclick="Modal.open('score')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21 7.5 13.5 2 9h7z" />
+                    </svg>
+                    Resume Score: <span id="score-mini" class="font-bold" style="color:var(--accent);">—</span>
+                </button>
+            </div>
+        </aside>
 
-                <div>
-                    <label class="text-xs text-gray-500 block mb-1">Opacity Control</label>
-                    <select id="in-watermark-opacity"
-                        class="w-full border p-1.5 text-xs rounded outline-none focus:ring-1 focus:ring-blue-500"
-                        onchange="updateResume()">
-                        <option value="0.03" selected>Faint (3% Opacity - Recommended ATS Standard)</option>
-                        <option value="0.05">Subtle (5% Opacity)</option>
-                        <option value="0.08">Visible (8% Opacity)</option>
-                        <option value="0">Disabled (Clean Blank)</option>
+        <!-- CENTER: Form editor -->
+        <main id="form-scroll" class="flex-1 min-w-0 overflow-y-auto custom-scroll no-print">
+            <div class="max-w-[720px] mx-auto px-6 py-8 space-y-5" id="form-root"></div>
+        </main>
+
+        <!-- RIGHT: Live preview -->
+        <section class="w-[48%] min-w-[460px] shrink-0 border-l flex flex-col"
+            style="border-color:var(--edit-border); background:var(--edit-surface-2);">
+            <div class="no-print h-12 shrink-0 flex items-center justify-between px-4 border-b"
+                style="border-color:var(--edit-border); background:var(--edit-surface);">
+                <div class="flex items-center gap-1">
+                    <select id="template-select"
+                        class="text-xs font-medium border rounded-md px-2 py-1.5 bg-transparent"
+                        style="border-color:var(--edit-border);"
+                        onchange="Store.set('meta.template', this.value); Render.preview();">
+                        <option value="classic">Classic</option>
+                        <option value="modern" selected>Modern</option>
+                        <option value="minimal">Minimal</option>
+                        <option value="executive">Executive</option>
+                        <option value="technical">Technical</option>
+                        <option value="corporate">Corporate</option>
+                        <option value="academic">Academic</option>
+                        <option value="creative">Creative ATS</option>
                     </select>
                 </div>
-            </section>
-
-            <!-- Contact Info -->
-            <section class="space-y-3">
-                <h3 class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Contact Information</h3>
-                <div class="grid grid-cols-2 gap-3">
-                    <input type="text" id="in-name" placeholder="Full Name"
-                        class="border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
-                        oninput="updateResume()">
-                    <input type="text" id="in-title" placeholder="Professional Title"
-                        class="border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
-                        oninput="updateResume()">
-                    <input type="text" id="in-email" placeholder="Email"
-                        class="border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
-                        oninput="updateResume()">
-                    <input type="text" id="in-phone" placeholder="Phone"
-                        class="border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
-                        oninput="updateResume()">
-                    <input type="text" id="in-location" placeholder="City, Country"
-                        class="border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
-                        oninput="updateResume()">
-                    <input type="text" id="in-github" placeholder="GitHub URL"
-                        class="border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
-                        oninput="updateResume()">
-                    <input type="text" id="in-linkedin" placeholder="LinkedIn URL"
-                        class="col-span-2 border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
-                        oninput="updateResume()">
+                <div class="flex items-center gap-1">
+                    <button class="icon-btn" onclick="UI.zoom(-1)" title="Zoom out">−</button>
+                    <span id="zoom-label" class="text-xs w-11 text-center font-medium"
+                        style="color:var(--edit-text-dim);">80%</span>
+                    <button class="icon-btn" onclick="UI.zoom(1)" title="Zoom in">+</button>
+                    <button class="icon-btn" onclick="UI.zoomFit()" title="Fit width">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                        </svg>
+                    </button>
+                    <button class="icon-btn" onclick="UI.fullscreenPreview()" title="Fullscreen preview">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                        </svg>
+                    </button>
                 </div>
-            </section>
-
-            <!-- Summary -->
-            <section class="space-y-3">
-                <h3 class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Professional Summary</h3>
-                <textarea id="in-summary" rows="4"
-                    placeholder="Brief high-impact overview of your experience and key skillsets..."
-                    class="w-full border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
-                    oninput="updateResume()"></textarea>
-            </section>
-
-            <!-- Experience -->
-            <section class="space-y-3">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Work Experience</h3>
-                    <button onclick="addExperience()"
-                        class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded font-medium">+
-                        Add</button>
+            </div>
+            <div id="preview-scroll"
+                class="flex-1 overflow-y-auto custom-scroll py-8 px-4 flex justify-center items-start">
+                <div id="preview-stage">
+                    <div id="resume-preview" class="print-area resume-page page-shadow" data-tpl="modern">
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0"
+                            style="overflow:hidden;">
+                            <div class="brand-watermark leading-none">RSB</div>
+                        </div>
+                        <div class="relative z-10" id="resume-body"></div>
+                    </div>
                 </div>
-                <div id="exp-form-list" class="space-y-4"></div>
-            </section>
+            </div>
+        </section>
+    </div>
 
-            <!-- Education -->
-            <section class="space-y-3">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Education</h3>
-                    <button onclick="addEducation()"
-                        class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded font-medium">+
-                        Add</button>
-                </div>
-                <div id="edu-form-list" class="space-y-4"></div>
-            </section>
+    <div id="toast-wrap"></div>
 
-            <!-- Skills -->
-            <section class="space-y-3">
-                <h3 class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Skills</h3>
-                <input type="text" id="in-skills-tech" placeholder="Core Development Skills (Comma separated)"
-                    class="w-full border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none mb-2"
-                    oninput="updateResume()">
-                <input type="text" id="in-skills-tools" placeholder="Architecture & Tools (Comma separated)"
-                    class="w-full border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
-                    oninput="updateResume()">
-            </section>
+    <!-- ============================= MODALS ============================= -->
+    <div class="modal-backdrop no-print" id="modal-settings">
+        <div class="modal-box w-[520px] max-h-[85vh] overflow-y-auto custom-scroll p-6"
+            onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="font-bold text-base font-display">Design settings</h3>
+                <button class="icon-btn" onclick="Modal.close('settings')">✕</button>
+            </div>
+            <div class="space-y-5" id="settings-body"></div>
         </div>
+    </div>
 
-        <!-- LIVE PREVIEW SIDEBAR (RIGHT) -->
-        <div id="preview-container"
-            class="lg:col-span-7 flex justify-center items-start h-full overflow-y-auto custom-scroll pb-10">
-            <div id="resume-preview"
-                class="print-area resume-page w-full max-w-[800px] bg-white p-10 rounded shadow-md border border-gray-200 min-h-[1050px] relative overflow-hidden">
-
-                <!-- UNIQUE BRAND RSB WATERMARK (3% FAINT OPACITY) -->
-                <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
-                    <div id="out-watermark" class="brand-watermark font-black text-[220px] leading-none"
-                        style="opacity: 0.03; color: #0f172a;">
-                        RSB
-                    </div>
-                </div>
-
-                <!-- RESUME CONTENT (Layered on z-10) -->
-                <div class="relative z-10">
-                    <!-- Header -->
-                    <div class="text-center border-b pb-4 mb-4">
-                        <h1 id="out-name" class="text-2xl font-bold uppercase tracking-wider">RISHABH BAIRAGI</h1>
-                        <p id="out-title" class="text-md font-medium text-gray-700 mt-1">Mobile Engineer | Flutter &
-                            Clean Architecture</p>
-                        <div id="out-contact" class="text-sm text-gray-600 mt-2 space-x-2">
-                            <span id="out-email">rishabh.bairagi.136@gmail.com</span> |
-                            <span id="out-phone">+91 9340062808</span> |
-                            <span id="out-location">Neemuch, MP, India</span> |
-                            <span id="out-github">github.com/rishabvsnv</span> |
-                            <span id="out-linkedin">linkedin.com/in/rishab-vaishnav</span>
-                        </div>
-                    </div>
-
-                    <!-- Summary Section -->
-                    <div class="mb-5">
-                        <h2 class="text-md font-bold uppercase border-b border-gray-400 pb-1 mb-2 tracking-wide">
-                            Professional Summary</h2>
-                        <p id="out-summary" class="text-sm text-gray-800 text-justify">
-                            Mobile Product Engineer with experience building production-ready Flutter applications using
-                            REST APIs, Riverpod, and scalable architecture patterns. Skilled in backend integration,
-                            state management, caching, performance optimization, and reliable mobile application
-                            development.
-                        </p>
-                    </div>
-
-                    <!-- Experience Section -->
-                    <div class="mb-5">
-                        <h2 class="text-md font-bold uppercase border-b border-gray-400 pb-1 mb-2 tracking-wide">Work
-                            Experience</h2>
-                        <div id="out-experience-list" class="space-y-4"></div>
-                    </div>
-
-                    <!-- Education Section -->
-                    <div class="mb-5">
-                        <h2 class="text-md font-bold uppercase border-b border-gray-400 pb-1 mb-2 tracking-wide">
-                            Education</h2>
-                        <div id="out-education-list" class="space-y-3"></div>
-                    </div>
-
-                    <!-- Skills Section -->
-                    <div>
-                        <h2 class="text-md font-bold uppercase border-b border-gray-400 pb-1 mb-2 tracking-wide">Skills
-                            & Proficiencies</h2>
-                        <div class="text-sm space-y-1">
-                            <div><strong class="font-semibold">Core Skills:</strong> <span id="out-skills-tech">Flutter
-                                    UI (Material Design), Dart, Riverpod, Ionic Framework (React), REST APIs, JSON
-                                    Parsing</span></div>
-                            <div><strong class="font-semibold">Architecture & Backend:</strong> <span
-                                    id="out-skills-tools">Service-Layer Architecture, Clean Architecture, Supabase,
-                                    Strapi, WordPress, Caching, Git</span></div>
-                        </div>
-                    </div>
-                </div>
-
+    <div class="modal-backdrop no-print" id="modal-io">
+        <div class="modal-box w-[440px] p-6" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="font-bold text-base font-display">Import / Export</h3>
+                <button class="icon-btn" onclick="Modal.close('io')">✕</button>
+            </div>
+            <div class="space-y-3">
+                <button class="btn btn-outline w-full justify-center" onclick="IO.exportJSON()">Export as JSON</button>
+                <button class="btn btn-outline w-full justify-center"
+                    onclick="document.getElementById('import-file').click()">Import from JSON</button>
+                <input type="file" id="import-file" accept="application/json" class="hidden"
+                    onchange="IO.importJSON(this.files[0])">
+                <div class="h-px my-2" style="background:var(--edit-border);"></div>
+                <button class="btn btn-outline w-full justify-center text-red-600" onclick="IO.resetConfirm()">Reset
+                    resume to blank</button>
             </div>
         </div>
     </div>
 
+    <div class="modal-backdrop no-print" id="modal-score">
+        <div class="modal-box w-[480px] max-h-[80vh] overflow-y-auto custom-scroll p-6"
+            onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-base font-display">ATS Resume Score</h3>
+                <button class="icon-btn" onclick="Modal.close('score')">✕</button>
+            </div>
+            <div id="score-body"></div>
+        </div>
+    </div>
+
     <script>
-        // Data Models
-        let experiences = [
-            {
-                role: 'Flutter Developer',
-                company: 'MySchoolio',
-                location: 'Neemuch, India',
-                dates: 'Jan 2025 – Present',
-                bullets: 'Developed modular reusable Flutter UI components improving development efficiency.\nIntegrated and optimized 20+ REST API endpoints with caching and session refresh handling.\nImplemented Riverpod-based state management reducing stale authentication state issues.\nImproved app reliability through offline handling and resilient network error management.'
+        /* ---------------------------- Utilities ---------------------------- */
+        const uid = () => Math.random().toString(36).slice(2, 9);
+        const esc = (s = '') => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
+        const linesToBullets = (txt = '') => txt.split('\n').map(l => l.trim()).filter(Boolean);
+        function get(obj, path) { return path.split('.').reduce((o, k) => o == null ? o : o[k], obj); }
+        function set(obj, path, val) { const ks = path.split('.'); let o = obj; for (let i = 0; i < ks.length - 1; i++) { o = o[ks[i]]; } o[ks[ks.length - 1]] = val; }
+
+        /* ---------------------------- Default State ---------------------------- */
+        function defaultState() {
+            return {
+                meta: {
+                    resumeName: 'Untitled Resume', template: 'modern', theme: 'light', accent: 'blue',
+                    font: 'Calibri', fontSize: 10.5, lineSpacing: 1.42, sectionSpacing: 14, margin: 16, headingStyle: 'normal'
+                },
+                personal: {
+                    name: 'RISHABH BAIRAGI', title: 'Mobile Engineer | Flutter & Clean Architecture',
+                    email: 'rishabh.bairagi.136@gmail.com', phone: '+91 9340062808', location: 'Neemuch, MP, India',
+                    github: 'https://github.com/rishabvsnv', linkedin: 'https://linkedin.com/in/rishab-vaishnav', website: ''
+                },
+                summary: 'Mobile Product Engineer with experience building production-ready Flutter applications using REST APIs, Riverpod, and scalable architecture patterns. Skilled in backend integration, state management, caching, performance optimization, and reliable mobile application development.',
+                sections: [
+                    {
+                        id: uid(), type: 'experience', title: 'Work Experience', visible: true, collapsed: false, items: [
+                            {
+                                id: uid(), role: 'Flutter Developer', company: 'MySchoolio', location: 'Neemuch, India', employmentType: 'Full-time', startDate: 'Jan 2025', endDate: 'Present', current: true, technologies: 'Flutter, Riverpod, REST APIs',
+                                description: 'Developed modular reusable Flutter UI components improving development efficiency.\nIntegrated and optimized 20+ REST API endpoints with caching and session refresh handling.\nImplemented Riverpod-based state management reducing stale authentication state issues.\nImproved app reliability through offline handling and resilient network error management.'
+                            },
+                            {
+                                id: uid(), role: 'Flutter Developer', company: 'easySIM (OCEAN GROUP)', location: 'Neemuch, India', employmentType: 'Contract', startDate: 'Oct 2024', endDate: 'Dec 2024', current: false, technologies: 'Flutter, REST APIs',
+                                description: 'Developed a mobile application for SIM-related service management.\nIntegrated backend APIs and developed responsive Flutter UI components.\nImplemented structured architecture and reliable error handling.'
+                            },
+                            {
+                                id: uid(), role: 'Flutter Developer', company: 'Dollorinfotech Pvt Ltd', location: 'Neemuch, MP, India', employmentType: 'Full-time', startDate: 'Jul 2024', endDate: 'Sep 2024', current: false, technologies: 'Flutter, REST APIs',
+                                description: 'Developed Dolfin, a Flutter-based customer ledger app similar to Khatabook.\nBuilt core modules: customer list, transactions, debit/credit, balances, search and filtering.\nIntegrated REST APIs and handled real-world network scenarios in UI.\nImplemented validations, reusable components, and performance optimizations.'
+                            },
+                            {
+                                id: uid(), role: 'Frontend Engineer', company: 'OKLABS', location: 'Neemuch, MP, India', employmentType: 'Full-time', startDate: 'Feb 2024', endDate: 'Jul 2024', current: false, technologies: 'HTML, CSS, Bootstrap, JavaScript',
+                                description: 'Developed responsive UI components using HTML, CSS, Bootstrap, and JavaScript.\nIntegrated REST APIs with proper UI state handling.\nImproved session handling and state refresh during logout and login flows.\nFollowed a service-layer architecture to improve frontend maintainability.'
+                            }
+                        ]
+                    },
+                    {
+                        id: uid(), type: 'education', title: 'Education', visible: true, collapsed: false, items: [
+                            { id: uid(), degree: 'Bachelor of Computer Application (BCA)', school: 'Gyanodaya Group of Management & Technology', location: 'Neemuch, India', percentage: '71.91%', cgpa: '', startDate: '2024', endDate: '2026' }
+                        ]
+                    },
+                    { id: uid(), type: 'projects', title: 'Projects', visible: true, collapsed: false, items: [] },
+                    {
+                        id: uid(), type: 'skills', title: 'Skills & Proficiencies', visible: true, collapsed: false, items: [
+                            { id: uid(), category: 'Core Development', items: 'Flutter UI (Material Design), Dart, Riverpod, Ionic Framework (React), REST APIs, JSON Parsing' },
+                            { id: uid(), category: 'Architecture & Tools', items: 'Service-Layer Architecture, Clean Architecture, Supabase, Strapi, WordPress, Caching, Git' }
+                        ]
+                    },
+                    { id: uid(), type: 'certificates', title: 'Certificates', visible: false, collapsed: true, items: [] },
+                    { id: uid(), type: 'achievements', title: 'Achievements', visible: false, collapsed: true, items: [] },
+                    { id: uid(), type: 'languages', title: 'Languages', visible: false, collapsed: true, items: [] },
+                    { id: uid(), type: 'interests', title: 'Interests', visible: false, collapsed: true, items: [] }
+                ]
+            };
+        }
+
+        /* ---------------------------- Store ---------------------------- */
+        const Store = {
+            state: null,
+            init() { this.state = Persist.load() || defaultState(); },
+            set(path, val, opts = {}) {
+                set(this.state, path, val);
+                if (!opts.silent) History.push();
+                Render.preview();
+                Toast.dirty();
+                Persist.saveDebounced();
+                if (opts.rerenderForm) Render.form();
             },
-            {
-                role: 'Flutter Developer',
-                company: 'easySIM (OCEAN GROUP)',
-                location: 'Neemuch, India',
-                dates: 'Oct 2024 – Dec 2024',
-                bullets: 'Developed a mobile application for SIM-related service management.\nIntegrated backend APIs and developed responsive Flutter UI components.\nImplemented structured architecture and reliable error handling.'
-            },
-            {
-                role: 'Flutter Developer',
-                company: 'Dollorinfotech Pvt Ltd',
-                location: 'Neemuch, MP, India',
-                dates: 'July 2024 – Sept 2024',
-                bullets: 'Developed Dolfin, a Flutter-based customer ledger app (similar to Khatabook).\nBuilt core modules: customer list, transactions, debit/credit, balances, search & filtering.\nIntegrated REST APIs and handled real-world network scenarios in UI.\nImplemented validations, reusable components, and performance optimizations.'
-            },
-            {
-                role: 'Frontend Engineer',
-                company: 'OKLABS',
-                location: 'Neemuch, MP, India',
-                dates: 'Feb 2024 – July 2024',
-                bullets: 'Developed responsive UI components using HTML, CSS, Bootstrap, and JavaScript.\nIntegrated REST APIs with proper UI state handling.\nImproved session handling and state refresh during logout and login flows.\nFollowed a service-layer architecture to improve frontend maintainability.'
+            section(id) { return this.state.sections.find(s => s.id === id); },
+            mutate(fn, opts = {}) {
+                fn(this.state);
+                History.push();
+                Render.form(); Render.sidebar(); Render.preview();
+                Toast.dirty(); Persist.saveDebounced();
             }
-        ];
-
-        let education = [
-            {
-                degree: 'Bachelor of Computer Application (BCA) - 71.91%',
-                school: 'Gyanodaya Group of Management & Technology',
-                location: 'Neemuch, India',
-                dates: '2024 – 2026'
-            }
-        ];
-
-        // Init
-        window.onload = () => {
-            document.getElementById('in-name').value = "RISHABH BAIRAGI";
-            document.getElementById('in-title').value = "Mobile Engineer | Flutter & Clean Architecture";
-            document.getElementById('in-email').value = "rishabh.bairagi.136@gmail.com";
-            document.getElementById('in-phone').value = "+91 9340062808";
-            document.getElementById('in-location').value = "Neemuch, MP, India";
-            document.getElementById('in-github').value = "https://github.com/rishabvsnv";
-            document.getElementById('in-linkedin').value = "https://linkedin.com/in/rishab-vaishnav";
-            document.getElementById('in-summary').value = "Mobile Product Engineer with experience building production-ready Flutter applications using REST APIs, Riverpod, and scalable architecture patterns. Skilled in backend integration, state management, caching, performance optimization, and reliable mobile application development.";
-            document.getElementById('in-skills-tech').value = "Flutter UI (Material Design), Dart, Riverpod, Ionic Framework (React), REST APIs, JSON Parsing & Data Mapping";
-            document.getElementById('in-skills-tools').value = "Service-Layer Architecture, Clean Architecture, Supabase, Strapi, WordPress, Caching, Git, HTML/CSS/Bootstrap";
-
-            renderExperienceForms();
-            renderEducationForms();
-            updateResume();
         };
 
-        // Render Dynamic Input Forms
-        function renderExperienceForms() {
-            const container = document.getElementById('exp-form-list');
-            container.innerHTML = '';
-            experiences.forEach((exp, index) => {
-                container.innerHTML += `
-                    <div class="p-3 border rounded bg-gray-50 space-y-2 relative">
-                        <button onclick="removeExperience(${index})" class="absolute top-2 right-2 text-red-500 text-xs font-bold hover:underline">Delete</button>
-                        <input type="text" value="${exp.role}" placeholder="Role / Title" class="w-full border p-1 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="experiences[${index}].role = this.value; updateResume();">
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" value="${exp.company}" placeholder="Company" class="border p-1 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="experiences[${index}].company = this.value; updateResume();">
-                            <input type="text" value="${exp.location}" placeholder="Location" class="border p-1 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="experiences[${index}].location = this.value; updateResume();">
-                        </div>
-                        <input type="text" value="${exp.dates}" placeholder="Dates" class="w-full border p-1 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="experiences[${index}].dates = this.value; updateResume();">
-                        <textarea placeholder="Bullet points (one per line)" rows="3" class="w-full border p-1 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="experiences[${index}].bullets = this.value; updateResume();">${exp.bullets}</textarea>
-                    </div>
-                `;
-            });
+        /* ---------------------------- History ---------------------------- */
+        const History = {
+            stack: [], idx: -1, limit: 60,
+            push() {
+                const snap = JSON.stringify(Store.state);
+                if (this.stack[this.idx] === snap) return;
+                this.stack = this.stack.slice(0, this.idx + 1);
+                this.stack.push(snap);
+                if (this.stack.length > this.limit) this.stack.shift();
+                this.idx = this.stack.length - 1;
+            },
+            undo() {
+                if (this.idx <= 0) { Toast.show('Nothing to undo'); return; }
+                this.idx--; Store.state = JSON.parse(this.stack[this.idx]);
+                Render.all(); Toast.show('Undid last change'); Persist.saveDebounced();
+            },
+            redo() {
+                if (this.idx >= this.stack.length - 1) { Toast.show('Nothing to redo'); return; }
+                this.idx++; Store.state = JSON.parse(this.stack[this.idx]);
+                Render.all(); Toast.show('Redid change'); Persist.saveDebounced();
+            }
+        };
+
+        /* ---------------------------- Persistence ---------------------------- */
+        const Persist = {
+            key: 'rsb_resume_v2',
+            load() { try { const raw = localStorage.getItem(this.key); return raw ? JSON.parse(raw) : null; } catch (e) { return null; } },
+            save() {
+                try { localStorage.setItem(this.key, JSON.stringify(Store.state)); Toast.saved(); }
+                catch (e) { Toast.show('Could not autosave (storage full)'); }
+            },
+            saveDebounced: null
+        };
+        Persist.saveDebounced = debounce(() => Persist.save(), 700);
+
+        /* ---------------------------- Toast ---------------------------- */
+        const Toast = {
+            show(msg, ms = 2200) {
+                const wrap = document.getElementById('toast-wrap');
+                const el = document.createElement('div');
+                el.className = 'toast'; el.textContent = msg;
+                wrap.appendChild(el);
+                requestAnimationFrame(() => el.classList.add('show'));
+                setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 300); }, ms);
+            },
+            dirty() { const d = document.getElementById('save-dot'), t = document.getElementById('save-text'); if (!d) return; d.className = 'save-dot dirty'; t.textContent = 'Unsaved changes'; },
+            saving() { const d = document.getElementById('save-dot'), t = document.getElementById('save-text'); if (!d) return; d.className = 'save-dot saving'; t.textContent = 'Saving…'; },
+            saved() { const d = document.getElementById('save-dot'), t = document.getElementById('save-text'); if (!d) return; d.className = 'save-dot'; t.textContent = 'Saved just now'; }
+        };
+
+        /* ---------------------------- Modal ---------------------------- */
+        const Modal = {
+            open(name) {
+                if (name === 'settings') Render.settings();
+                if (name === 'score') Render.score();
+                document.getElementById('modal-' + name).classList.add('open');
+            },
+            close(name) { document.getElementById('modal-' + name).classList.remove('open'); }
+        };
+        document.querySelectorAll('.modal-backdrop').forEach(b => b.addEventListener('click', () => b.classList.remove('open')));
+
+        /* ---------------------------- Section Schemas ---------------------------- */
+        const SECTION_DEFS = {
+            experience: {
+                label: 'Work Experience', icon: 'briefcase', itemLabel: 'position',
+                fields: [
+                    { key: 'role', label: 'Job Title', type: 'text', col: 2 },
+                    { key: 'company', label: 'Company', type: 'text', col: 1 },
+                    { key: 'location', label: 'Location', type: 'text', col: 1 },
+                    { key: 'employmentType', label: 'Employment Type', type: 'select', col: 1, options: ['Full-time', 'Part-time', 'Contract', 'Internship', 'Freelance'] },
+                    { key: 'startDate', label: 'Start Date', type: 'text', col: 1 },
+                    { key: 'endDate', label: 'End Date', type: 'text', col: 1 },
+                    { key: 'current', label: 'I currently work here', type: 'checkbox', col: 2 },
+                    { key: 'description', label: 'Responsibilities & Achievements (one per line)', type: 'textarea', col: 2, bulletHint: true },
+                    { key: 'technologies', label: 'Technologies Used', type: 'text', col: 2 }
+                ],
+                empty: () => ({ role: '', company: '', location: '', employmentType: 'Full-time', startDate: '', endDate: '', current: false, description: '', technologies: '' })
+            },
+            education: {
+                label: 'Education', icon: 'cap', itemLabel: 'education entry',
+                fields: [
+                    { key: 'degree', label: 'Degree / Certificate', type: 'text', col: 2 },
+                    { key: 'school', label: 'University / School', type: 'text', col: 2 },
+                    { key: 'location', label: 'Location', type: 'text', col: 1 },
+                    { key: 'startDate', label: 'Start Year', type: 'text', col: 1 },
+                    { key: 'endDate', label: 'Graduation Year', type: 'text', col: 1 },
+                    { key: 'cgpa', label: 'CGPA', type: 'text', col: 1 },
+                    { key: 'percentage', label: 'Percentage', type: 'text', col: 1 }
+                ],
+                empty: () => ({ degree: '', school: '', location: '', startDate: '', endDate: '', cgpa: '', percentage: '' })
+            },
+            projects: {
+                label: 'Projects', icon: 'code', itemLabel: 'project',
+                fields: [
+                    { key: 'title', label: 'Project Title', type: 'text', col: 2 },
+                    { key: 'role', label: 'Your Role', type: 'text', col: 1 },
+                    { key: 'duration', label: 'Duration', type: 'text', col: 1 },
+                    { key: 'description', label: 'Description (one point per line)', type: 'textarea', col: 2, bulletHint: true },
+                    { key: 'technologies', label: 'Technologies', type: 'text', col: 2 },
+                    { key: 'github', label: 'GitHub URL', type: 'text', col: 1 },
+                    { key: 'live', label: 'Live Demo URL', type: 'text', col: 1 },
+                    { key: 'achievements', label: 'Key Achievements', type: 'textarea', col: 2 }
+                ],
+                empty: () => ({ title: '', role: '', duration: '', description: '', technologies: '', github: '', live: '', achievements: '' })
+            },
+            skills: {
+                label: 'Skills', icon: 'star', itemLabel: 'skill category',
+                fields: [
+                    { key: 'category', label: 'Category (e.g. Programming Languages)', type: 'text', col: 2 },
+                    { key: 'items', label: 'Skills (comma separated)', type: 'text', col: 2 }
+                ],
+                empty: () => ({ category: '', items: '' })
+            },
+            certificates: {
+                label: 'Certificates', icon: 'badge', itemLabel: 'certificate',
+                fields: [
+                    { key: 'title', label: 'Certificate Title', type: 'text', col: 2 },
+                    { key: 'issuer', label: 'Issuing Organization', type: 'text', col: 1 },
+                    { key: 'date', label: 'Date', type: 'text', col: 1 },
+                    { key: 'credentialUrl', label: 'Credential URL', type: 'text', col: 2 }
+                ],
+                empty: () => ({ title: '', issuer: '', date: '', credentialUrl: '' })
+            },
+            achievements: {
+                label: 'Achievements', icon: 'trophy', itemLabel: 'achievement',
+                fields: [
+                    { key: 'title', label: 'Achievement Title', type: 'text', col: 2 },
+                    { key: 'date', label: 'Date', type: 'text', col: 1 },
+                    { key: 'description', label: 'Description', type: 'textarea', col: 2 }
+                ],
+                empty: () => ({ title: '', date: '', description: '' })
+            },
+            languages: {
+                label: 'Languages', icon: 'globe', itemLabel: 'language',
+                fields: [
+                    { key: 'name', label: 'Language', type: 'text', col: 1 },
+                    { key: 'proficiency', label: 'Proficiency', type: 'select', col: 1, options: ['Native', 'Fluent', 'Professional', 'Intermediate', 'Basic'] }
+                ],
+                empty: () => ({ name: '', proficiency: 'Professional' })
+            },
+            interests: {
+                label: 'Interests', icon: 'heart', itemLabel: 'interest',
+                fields: [{ key: 'name', label: 'Interest', type: 'text', col: 2 }],
+                empty: () => ({ name: '' })
+            },
+            custom: {
+                label: 'Custom Section', icon: 'layers', itemLabel: 'entry',
+                fields: [
+                    { key: 'title', label: 'Title', type: 'text', col: 2 },
+                    { key: 'subtitle', label: 'Subtitle', type: 'text', col: 1 },
+                    { key: 'date', label: 'Date', type: 'text', col: 1 },
+                    { key: 'description', label: 'Description', type: 'textarea', col: 2 }
+                ],
+                empty: () => ({ title: '', subtitle: '', date: '', description: '' })
+            }
+        };
+        const ICONS = {
+            briefcase: '<path d="M20 7h-4V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v3H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zM10 4h4v3h-4z"/>',
+            cap: '<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.66 3 3 6 3s6-1.34 6-3v-5"/>',
+            code: '<path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>',
+            star: '<path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21 7.5 13.5 2 9h7z"/>',
+            badge: '<circle cx="12" cy="8" r="6"/><path d="M15.5 13.5L17 22l-5-3-5 3 1.5-8.5"/>',
+            trophy: '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3a2 2 0 0 1-2 4M7 5H4a2 2 0 0 0 2 4"/>',
+            globe: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/>',
+            heart: '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>',
+            layers: '<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>',
+            user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',
+            text: '<path d="M4 6h16M4 12h16M4 18h10"/>',
+            drag: '<circle cx="8" cy="6" r="1.4"/><circle cx="8" cy="12" r="1.4"/><circle cx="8" cy="18" r="1.4"/><circle cx="16" cy="6" r="1.4"/><circle cx="16" cy="12" r="1.4"/><circle cx="16" cy="18" r="1.4"/>'
+        };
+        const svgIcon = (name, w = 15) => `<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] || ''}</svg>`;
+
+        const WEAK_VERBS = ['responsible for', 'helped', 'worked on', 'was involved in', 'participated in', 'assisted with', 'did', 'handled tasks', 'duties included'];
+        const STRONG_VERBS = ['Architected', 'Engineered', 'Spearheaded', 'Optimized', 'Delivered', 'Automated', 'Streamlined', 'Implemented', 'Accelerated', 'Reduced', 'Increased', 'Launched', 'Designed', 'Orchestrated'];
+        const ATS_KEYWORDS = ['REST API', 'API integration', 'state management', 'CI/CD', 'Git', 'Agile', 'testing', 'performance optimization', 'cross-functional', 'architecture', 'cloud', 'database', 'UI/UX', 'deployment'];
+
+        /* ---------------------------- Render ---------------------------- */
+        const Render = {
+            all() { this.sidebar(); this.form(); this.preview(); this.settingsIfOpen(); },
+            settingsIfOpen() { if (document.getElementById('modal-settings').classList.contains('open')) this.settings(); },
+
+            sidebar() {
+                const nav = document.getElementById('sidebar-nav');
+                const fixed = `
+      <div class="sidebar-item" onclick="UI.scrollTo('sec-personal')">${svgIcon('user')}<span>Personal Details</span></div>
+      <div class="sidebar-item" onclick="UI.scrollTo('sec-summary')">${svgIcon('text')}<span>Summary</span></div>
+      <div class="h-px my-2" style="background:var(--edit-border)"></div>`;
+                const items = Store.state.sections.map((s, i) => {
+                    const def = SECTION_DEFS[s.type];
+                    return `<div class="sidebar-item ${!s.visible ? 'opacity-40' : ''}" draggable="true"
+          data-idx="${i}" ondragstart="DND.start(event,'section')" ondragover="DND.over(event)" ondrop="DND.drop(event,'section')" ondragend="DND.end(event)"
+          onclick="UI.scrollTo('sec-${s.id}')">
+        <span class="drag-handle">${svgIcon('drag', 13)}</span>
+        ${svgIcon(def.icon, 15)}
+        <span class="flex-1 truncate">${esc(s.title)}</span>
+        <button class="icon-btn !w-6 !h-6" title="${s.visible ? 'Hide section' : 'Show section'}" onclick="event.stopPropagation(); Sections.toggleVisible('${s.id}')">
+          ${s.visible ? svgIcon('eye', 13) : svgIcon('eyeOff', 13)}
+        </button>
+      </div>`;
+                }).join('');
+                nav.innerHTML = fixed + items;
+
+                const addList = document.getElementById('add-section-list');
+                addList.innerHTML = Object.keys(SECTION_DEFS).map(type => `
+      <div class="sidebar-item" onclick="Sections.add('${type}')">${svgIcon(SECTION_DEFS[type].icon, 15)}<span>${SECTION_DEFS[type].label}</span></div>
+    `).join('');
+            },
+
+            form() {
+                const root = document.getElementById('form-root');
+                const p = Store.state.personal;
+                let html = `
+    <div class="section-block surface p-5" id="sec-personal">
+      <h3 class="font-bold text-sm mb-4 flex items-center gap-2">${svgIcon('user')} Personal Details</h3>
+      <div class="grid grid-cols-2 gap-3">
+        ${floatField('personal.name', 'Full Name', p.name)}
+        ${floatField('personal.title', 'Professional Title', p.title)}
+        ${floatField('personal.email', 'Email', p.email)}
+        ${floatField('personal.phone', 'Phone', p.phone)}
+        ${floatField('personal.location', 'City, Country', p.location)}
+        ${floatField('personal.github', 'GitHub URL', p.github)}
+        ${floatField('personal.linkedin', 'LinkedIn URL', p.linkedin)}
+        ${floatField('personal.website', 'Portfolio / Website', p.website)}
+      </div>
+    </div>
+    <div class="section-block surface p-5" id="sec-summary">
+      <h3 class="font-bold text-sm mb-4 flex items-center gap-2">${svgIcon('text')} Professional Summary</h3>
+      <div class="field"><textarea rows="4" placeholder=" " oninput="Store.set('summary', this.value); ATS.refreshMini();">${esc(Store.state.summary)}</textarea><label>Summary</label></div>
+      <div class="counter ${Store.state.summary.split(/\s+/).filter(Boolean).length > 60 ? 'warn' : ''}">${Store.state.summary.split(/\s+/).filter(Boolean).length} words ${Store.state.summary.split(/\s+/).filter(Boolean).length > 60 ? '· consider trimming to 40–60' : ''}</div>
+    </div>`;
+
+                Store.state.sections.forEach(s => { html += Render.sectionBlock(s); });
+                root.innerHTML = html;
+            },
+
+            sectionBlock(s) {
+                const def = SECTION_DEFS[s.type];
+                const isCustomTitle = s.type === 'custom';
+                let itemsHtml = '';
+                if (s.type === 'skills') {
+                    itemsHtml = s.items.map((it, i) => Render.skillItemCard(s, it, i)).join('') || Render.emptyHint('skill category');
+                } else if (s.type === 'interests') {
+                    itemsHtml = `<div class="flex flex-wrap gap-2">` + s.items.map((it, i) => `
+        <div class="chip rounded-full px-3 py-1.5 flex items-center gap-2 text-xs">
+          <input value="${esc(it.name)}" placeholder="Interest" class="bg-transparent outline-none w-24" oninput="Sections.updateItem('${s.id}','${it.id}','name',this.value)">
+          <button class="text-red-500" onclick="Sections.removeItem('${s.id}','${it.id}')">✕</button>
+        </div>`).join('') + `</div>` + (s.items.length ? '' : Render.emptyHint('interest'));
+                } else {
+                    itemsHtml = s.items.map((it, i) => Render.itemCard(s, def, it, i)).join('') || Render.emptyHint(def.itemLabel);
+                }
+                return `
+    <div class="section-block surface p-5 ${s.collapsed ? 'collapsed' : ''}" id="sec-${s.id}">
+      <div class="flex items-center justify-between mb-1 cursor-pointer" onclick="Sections.toggleCollapse('${s.id}')">
+        <div class="flex items-center gap-2 min-w-0 flex-1">
+          ${svgIcon(def.icon)}
+          ${isCustomTitle
+                        ? `<input onclick="event.stopPropagation()" value="${esc(s.title)}" class="font-bold text-sm bg-transparent outline-none border-b border-transparent focus:border-[var(--accent)]" oninput="Sections.rename('${s.id}',this.value)">`
+                        : `<h3 class="font-bold text-sm truncate">${esc(s.title)}</h3>`}
+          <span class="text-[11px] chip rounded-full px-2 py-0.5">${s.items.length}</span>
+        </div>
+        <div class="flex items-center gap-1" onclick="event.stopPropagation()">
+          <label class="chk mr-1"><input type="checkbox" ${s.visible ? 'checked' : ''} onchange="Sections.toggleVisible('${s.id}')"> <span class="hidden sm:inline">visible</span></label>
+          <button class="icon-btn danger" title="Delete section" onclick="Sections.remove('${s.id}')">${svgIcon('trash', 14)}</button>
+          <button class="icon-btn" title="Collapse" onclick="Sections.toggleCollapse('${s.id}')"><span class="collapse-caret">${svgIcon('chevron', 15)}</span></button>
+        </div>
+      </div>
+      <div class="collapse-body"><div class="collapse-inner pt-3 space-y-3">
+        ${itemsHtml}
+        <button class="btn btn-outline w-full justify-center text-xs" onclick="Sections.addItem('${s.id}')">${svgIcon('plus', 13)} Add ${def.itemLabel}</button>
+      </div></div>
+    </div>`;
+            },
+
+            emptyHint(label) { return `<div class="text-xs text-center py-6 rounded-lg border border-dashed" style="border-color:var(--edit-border); color:var(--edit-text-faint);">No ${label} yet — click "Add" below to create one.</div>`; },
+
+            itemCard(s, def, it, idx) {
+                const fieldsHtml = def.fields.map(f => {
+                    const val = it[f.key] ?? '';
+                    const colClass = f.col === 2 ? 'col-span-2' : 'col-span-1';
+                    if (f.type === 'textarea') {
+                        const count = (val || '').length;
+                        return `<div class="${colClass} field">
+          <textarea rows="3" placeholder=" " oninput="Sections.updateItem('${s.id}','${it.id}','${f.key}',this.value); ATS.refreshMini();">${esc(val)}</textarea>
+          <label>${esc(f.label)}</label>
+          ${f.bulletHint ? `<div class="counter">${count} chars · one bullet per line</div>` : ''}
+        </div>`;
+                    }
+                    if (f.type === 'select') {
+                        return `<div class="${colClass} field-plain"><label>${esc(f.label)}</label>
+          <select onchange="Sections.updateItem('${s.id}','${it.id}','${f.key}',this.value)">
+            ${f.options.map(o => `<option ${o === val ? 'selected' : ''}>${o}</option>`).join('')}
+          </select></div>`;
+                    }
+                    if (f.type === 'checkbox') {
+                        return `<div class="${colClass} flex items-center pt-1"><label class="chk">
+          <input type="checkbox" ${val ? 'checked' : ''} onchange="Sections.updateItem('${s.id}','${it.id}','${f.key}',this.checked)"> ${esc(f.label)}
+        </label></div>`;
+                    }
+                    return `<div class="${colClass}">${floatField(null, f.label, val, `Sections.updateItem('${s.id}','${it.id}','${f.key}',this.value)`)}</div>`;
+                }).join('');
+
+                return `<div class="item-card p-4" draggable="true" data-sec="${s.id}" data-idx="${idx}"
+        ondragstart="DND.start(event,'item')" ondragover="DND.over(event)" ondrop="DND.drop(event,'item')" ondragend="DND.end(event)">
+      <div class="flex items-center justify-between mb-3">
+        <span class="drag-handle">${svgIcon('drag', 14)}</span>
+        <div class="flex items-center gap-0.5">
+          <button class="icon-btn !w-7 !h-7" title="Move up" onclick="Sections.moveItem('${s.id}','${it.id}',-1)">${svgIcon('up', 14)}</button>
+          <button class="icon-btn !w-7 !h-7" title="Move down" onclick="Sections.moveItem('${s.id}','${it.id}',1)">${svgIcon('down', 14)}</button>
+          <button class="icon-btn !w-7 !h-7" title="Duplicate" onclick="Sections.duplicateItem('${s.id}','${it.id}')">${svgIcon('copy', 14)}</button>
+          <button class="icon-btn danger !w-7 !h-7" title="Delete" onclick="Sections.removeItem('${s.id}','${it.id}')">${svgIcon('trash', 14)}</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">${fieldsHtml}</div>
+    </div>`;
+            },
+
+            skillItemCard(s, it, idx) {
+                return `<div class="item-card p-4" draggable="true" data-sec="${s.id}" data-idx="${idx}"
+        ondragstart="DND.start(event,'item')" ondragover="DND.over(event)" ondrop="DND.drop(event,'item')" ondragend="DND.end(event)">
+      <div class="flex items-center justify-between mb-3">
+        <span class="drag-handle">${svgIcon('drag', 14)}</span>
+        <div class="flex items-center gap-0.5">
+          <button class="icon-btn !w-7 !h-7" title="Duplicate" onclick="Sections.duplicateItem('${s.id}','${it.id}')">${svgIcon('copy', 14)}</button>
+          <button class="icon-btn danger !w-7 !h-7" title="Delete" onclick="Sections.removeItem('${s.id}','${it.id}')">${svgIcon('trash', 14)}</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="col-span-2">${floatField(null, 'Category', it.category, `Sections.updateItem('${s.id}','${it.id}','category',this.value)`)}</div>
+        <div class="col-span-2">${floatField(null, 'Skills (comma separated)', it.items, `Sections.updateItem('${s.id}','${it.id}','items',this.value)`)}</div>
+      </div>
+    </div>`;
+            },
+
+            /* -------------------- PREVIEW -------------------- */
+            preview() {
+                const st = Store.state, m = st.meta;
+                document.getElementById('resume-name-input') && (document.getElementById('resume-name-input').value = m.resumeName);
+                document.getElementById('template-select').value = m.template;
+
+                const root = document.documentElement.style;
+                root.setProperty('--pv-font', FONT_STACKS[m.font] || m.font);
+                root.setProperty('--pv-size', m.fontSize + 'pt');
+                root.setProperty('--pv-line', m.lineSpacing);
+                root.setProperty('--pv-sec-gap', m.sectionSpacing + 'px');
+                root.setProperty('--pv-margin', m.margin + 'mm');
+                const accentHex = ACCENTS[m.accent] || ACCENTS.blue;
+                root.setProperty('--accent', accentHex);
+                root.setProperty('--rv-accent', accentHex);
+                root.setProperty('--rv-accent-08', accentHex + '14');
+
+                const pv = document.getElementById('resume-preview');
+                pv.setAttribute('data-tpl', m.template);
+
+                const p = st.personal;
+                const contactParts = [p.email, p.phone, p.location,
+                p.github ? p.github.replace(/^https?:\/\//, '') : '', p.linkedin ? p.linkedin.replace(/^https?:\/\//, '') : '', p.website ? p.website.replace(/^https?:\/\//, '') : '']
+                    .filter(Boolean);
+
+                let body = `
+      <div class="rheader mb-4">
+        <h1 class="rname text-2xl">${esc(p.name) || 'YOUR NAME'}</h1>
+        ${p.title ? `<p class="text-[1.02em] mt-1" style="color:#333;">${esc(p.title)}</p>` : ''}
+        ${contactParts.length ? `<div class="text-[.92em] mt-2" style="color:#444;">${contactParts.map(esc).join('  |  ')}</div>` : ''}
+      </div>`;
+
+                if (st.summary && st.summary.trim()) {
+                    body += `<div class="rsec"><h2>Professional Summary</h2><p style="text-align:justify;">${esc(st.summary)}</p></div>`;
+                }
+
+                st.sections.filter(s => s.visible).forEach(s => { body += Render.previewSection(s); });
+
+                document.getElementById('resume-body').innerHTML = body;
+                ATS.refreshMini();
+            },
+
+            previewSection(s) {
+                if (!s.items.length) return '';
+                const title = esc(s.title);
+                switch (s.type) {
+                    case 'experience': return `<div class="rsec"><h2>${title}</h2><div class="space-y-3 mt-2">${s.items.map(it => `
+        <div>
+          <div class="flex justify-between items-baseline flex-wrap gap-x-2">
+            <span class="font-bold">${esc(it.role) || 'Job Title'} <span class="font-normal italic">— ${esc(it.company) || 'Company'}</span></span>
+            <span class="text-[.9em]" style="color:#444;">${esc(it.startDate)}${it.startDate || it.endDate ? ' – ' : ''}${it.current ? 'Present' : esc(it.endDate)}</span>
+          </div>
+          <div class="text-[.85em] mb-1" style="color:#555;">${[it.location, it.employmentType].filter(Boolean).map(esc).join(' · ')}</div>
+          ${it.description ? `<ul class="text-[.95em]">${linesToBullets(it.description).map(b => `<li>${esc(b)}</li>`).join('')}</ul>` : ''}
+          ${it.technologies ? `<div class="text-[.85em] mt-1" style="color:#555;"><em>Technologies:</em> ${esc(it.technologies)}</div>` : ''}
+        </div>`).join('')}</div></div>`;
+
+                    case 'education': return `<div class="rsec"><h2>${title}</h2><div class="space-y-2 mt-2">${s.items.map(it => `
+        <div class="flex justify-between flex-wrap gap-x-2">
+          <div><span class="font-bold">${esc(it.degree) || 'Degree'}</span>, ${esc(it.school) || 'School'} <span class="text-[.85em]" style="color:#555;">${it.location ? `(${esc(it.location)})` : ''}</span>
+            ${(it.cgpa || it.percentage) ? `<div class="text-[.85em]" style="color:#555;">${it.cgpa ? `CGPA: ${esc(it.cgpa)}` : ''}${it.cgpa && it.percentage ? ' · ' : ''}${it.percentage ? `Percentage: ${esc(it.percentage)}` : ''}</div>` : ''}
+          </div>
+          <div class="text-[.9em] whitespace-nowrap" style="color:#444;">${esc(it.startDate)}${it.startDate || it.endDate ? ' – ' : ''}${esc(it.endDate)}</div>
+        </div>`).join('')}</div></div>`;
+
+                    case 'projects': return `<div class="rsec"><h2>${title}</h2><div class="space-y-3 mt-2">${s.items.map(it => `
+        <div>
+          <div class="flex justify-between flex-wrap gap-x-2">
+            <span class="font-bold">${esc(it.title) || 'Project'}${it.role ? ` <span class="font-normal italic">— ${esc(it.role)}</span>` : ''}</span>
+            <span class="text-[.9em]" style="color:#444;">${esc(it.duration)}</span>
+          </div>
+          ${it.description ? `<ul class="text-[.95em]">${linesToBullets(it.description).map(b => `<li>${esc(b)}</li>`).join('')}</ul>` : ''}
+          ${it.achievements ? `<div class="text-[.9em]">${esc(it.achievements)}</div>` : ''}
+          <div class="text-[.85em]" style="color:#555;">${[it.technologies, it.github, it.live].filter(Boolean).map(esc).join(' · ')}</div>
+        </div>`).join('')}</div></div>`;
+
+                    case 'skills': return `<div class="rsec"><h2>${title}</h2><div class="text-[.95em] space-y-1 mt-2">${s.items.filter(it => it.category || it.items).map(it => `
+        <div><strong class="font-semibold">${esc(it.category) || 'Skills'}:</strong> ${esc(it.items)}</div>`).join('')}</div></div>`;
+
+                    case 'certificates': return `<div class="rsec"><h2>${title}</h2><div class="space-y-1.5 mt-2">${s.items.map(it => `
+        <div class="flex justify-between flex-wrap gap-x-2 text-[.95em]"><span><strong>${esc(it.title)}</strong>${it.issuer ? ` — ${esc(it.issuer)}` : ''}</span><span style="color:#444;">${esc(it.date)}</span></div>`).join('')}</div></div>`;
+
+                    case 'achievements': return `<div class="rsec"><h2>${title}</h2><ul class="text-[.95em] mt-2">${s.items.map(it => `
+        <li><strong>${esc(it.title)}</strong>${it.date ? ` (${esc(it.date)})` : ''}${it.description ? ` — ${esc(it.description)}` : ''}</li>`).join('')}</ul></div>`;
+
+                    case 'languages': return `<div class="rsec"><h2>${title}</h2><div class="text-[.95em] mt-2">${s.items.map(it => `${esc(it.name)} (${esc(it.proficiency)})`).join(' · ')}</div></div>`;
+
+                    case 'interests': return `<div class="rsec"><h2>${title}</h2><div class="text-[.95em] mt-2">${s.items.map(it => esc(it.name)).filter(Boolean).join(' · ')}</div></div>`;
+
+                    case 'custom': return `<div class="rsec"><h2>${title}</h2><div class="space-y-2 mt-2">${s.items.map(it => `
+        <div class="flex justify-between flex-wrap gap-x-2">
+          <div><span class="font-bold">${esc(it.title)}</span>${it.subtitle ? ` — ${esc(it.subtitle)}` : ''}${it.description ? `<div class="text-[.95em]">${esc(it.description)}</div>` : ''}</div>
+          <div class="text-[.9em]" style="color:#444;">${esc(it.date)}</div>
+        </div>`).join('')}</div></div>`;
+                    default: return '';
+                }
+            },
+
+            settings() {
+                const m = Store.state.meta;
+                const body = document.getElementById('settings-body');
+                body.innerHTML = `
+      <div>
+        <div class="text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--edit-text-faint);">Theme</div>
+        <div class="flex gap-2">
+          <button class="btn ${m.theme === 'light' ? 'btn-primary' : 'btn-outline'} flex-1 justify-center" onclick="UI.setTheme('light')">Light</button>
+          <button class="btn ${m.theme === 'dark' ? 'btn-primary' : 'btn-outline'} flex-1 justify-center" onclick="UI.setTheme('dark')">Dark editor</button>
+        </div>
+      </div>
+      <div>
+        <div class="text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--edit-text-faint);">Accent color</div>
+        <div class="flex gap-2">
+          ${Object.entries(ACCENTS).map(([name, hex]) => `
+            <button title="${name}" class="w-8 h-8 rounded-full border-2 ${m.accent === name ? 'border-[var(--edit-text)]' : 'border-transparent'}" style="background:${hex}" onclick="Store.set('meta.accent','${name}')"></button>
+          `).join('')}
+        </div>
+      </div>
+      <div>
+        <div class="text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--edit-text-faint);">Font</div>
+        <select class="w-full border rounded-lg px-3 py-2 text-sm" style="border-color:var(--edit-border); background:var(--edit-surface);" onchange="Store.set('meta.font', this.value)">
+          ${Object.keys(FONT_STACKS).map(f => `<option value="${f}" ${m.font === f ? 'selected' : ''}>${f}</option>`).join('')}
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        ${rangeRow('Font size', 'meta.fontSize', m.fontSize, 8.5, 13, 0.5, 'pt')}
+        ${rangeRow('Line spacing', 'meta.lineSpacing', m.lineSpacing, 1.1, 1.8, 0.02, '×')}
+        ${rangeRow('Section spacing', 'meta.sectionSpacing', m.sectionSpacing, 6, 28, 1, 'px')}
+        ${rangeRow('Page margins', 'meta.margin', m.margin, 8, 28, 1, 'mm')}
+      </div>
+      <div class="p-3 rounded-lg text-xs" style="background:var(--edit-surface-2); color:var(--edit-text-dim);">
+        Tip: Templates and colors only change the visual style — the underlying text stays single-column and screen-reader friendly for ATS parsing.
+      </div>
+    `;
+            },
+
+            score() { ATS.renderFull(); }
+        };
+
+        const FONT_STACKS = {
+            'Calibri': "'Calibri','Carlito','Arial',sans-serif", 'Inter': "'Inter',sans-serif", 'Roboto': "'Roboto',sans-serif",
+            'Open Sans': "'Open Sans',sans-serif", 'Lato': "'Lato',sans-serif", 'Source Sans': "'Source Sans 3',sans-serif",
+            'Arial': "Arial,Helvetica,sans-serif", 'Times New Roman': "'Times New Roman',Times,serif"
+        };
+        const ACCENTS = { blue: '#2563EB', black: '#18181B', green: '#059669', purple: '#7C3AED', orange: '#EA580C' };
+
+        function floatField(path, label, value, onchangeOverride) {
+            const handler = onchangeOverride || `Store.set('${path}', this.value)`;
+            return `<div class="field"><input type="text" placeholder=" " value="${esc(value || '')}" oninput="${handler}"><label>${esc(label)}</label></div>`;
+        }
+        function rangeRow(label, path, val, min, max, step, unit) {
+            return `<div class="col-span-1">
+    <div class="flex justify-between text-xs mb-1"><span class="font-medium" style="color:var(--edit-text-dim)">${label}</span><span style="color:var(--edit-text-faint)">${val}${unit}</span></div>
+    <input type="range" min="${min}" max="${max}" step="${step}" value="${val}" class="w-full accent-[var(--accent)]"
+      oninput="this.previousElementSibling.querySelector('span:last-child').textContent=this.value+'${unit}'; Store.set('${path}', parseFloat(this.value))">
+  </div>`;
+        }
+        Object.assign(ICONS, {
+            eye: '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>',
+            eyeOff: '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.6 21.6 0 0 1 5.06-6.06M9.9 4.24A10.6 10.6 0 0 1 12 4c7 0 11 7 11 7a21.6 21.6 0 0 1-2.16 3.19"/><path d="M1 1l22 22"/>',
+            trash: '<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/>',
+            chevron: '<path d="M6 9l6 6 6-6"/>',
+            plus: '<path d="M12 5v14M5 12h14"/>',
+            up: '<path d="M18 15l-6-6-6 6"/>',
+            down: '<path d="M6 9l6 6 6-6"/>',
+            copy: '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>'
+        });
+
+        /* ---------------------------- Sections CRUD ---------------------------- */
+        const Sections = {
+            add(type) {
+                const def = SECTION_DEFS[type];
+                Store.mutate(st => st.sections.push({ id: uid(), type, title: type === 'custom' ? 'Custom Section' : def.label, visible: true, collapsed: false, items: [] }));
+                document.getElementById('add-section-menu').classList.add('hidden');
+                Toast.show(def.label + ' section added');
+                setTimeout(() => UI.scrollTo('sec-' + Store.state.sections[Store.state.sections.length - 1].id), 80);
+            },
+            remove(id) {
+                const s = Store.section(id);
+                if (!confirm(`Delete "${s.title}" and all its entries?`)) return;
+                Store.mutate(st => st.sections = st.sections.filter(x => x.id !== id));
+                Toast.show('Section deleted');
+            },
+            rename(id, val) { const s = Store.section(id); s.title = val; History.push(); Render.sidebar(); Render.preview(); Persist.saveDebounced(); },
+            toggleVisible(id) { const s = Store.section(id); s.visible = !s.visible; Store.mutate(() => { }); },
+            toggleCollapse(id) { const s = Store.section(id); s.collapsed = !s.collapsed; History.push(); Render.sidebar(); document.getElementById('sec-' + id).classList.toggle('collapsed'); Persist.saveDebounced(); },
+            addItem(id) {
+                const s = Store.section(id); const def = SECTION_DEFS[s.type];
+                s.items.push(Object.assign({ id: uid() }, def.empty()));
+                s.collapsed = false;
+                Store.mutate(() => { });
+            },
+            updateItem(sid, iid, key, val) {
+                const s = Store.section(sid); const it = s.items.find(i => i.id === iid); if (!it) return;
+                it[key] = val; History.push(); Render.preview(); Toast.dirty(); Persist.saveDebounced();
+            },
+            removeItem(sid, iid) {
+                const s = Store.section(sid); s.items = s.items.filter(i => i.id !== iid); Store.mutate(() => { });
+            },
+            duplicateItem(sid, iid) {
+                const s = Store.section(sid); const idx = s.items.findIndex(i => i.id === iid);
+                const copy = JSON.parse(JSON.stringify(s.items[idx])); copy.id = uid();
+                s.items.splice(idx + 1, 0, copy); Store.mutate(() => { }); Toast.show('Duplicated');
+            },
+            moveItem(sid, iid, dir) {
+                const s = Store.section(sid); const idx = s.items.findIndex(i => i.id === iid);
+                const to = idx + dir; if (to < 0 || to >= s.items.length) return;
+                [s.items[idx], s.items[to]] = [s.items[to], s.items[idx]];
+                Store.mutate(() => { });
+            }
+        };
+
+        /* ---------------------------- Drag & Drop ---------------------------- */
+        const DND = {
+            dragEl: null, dragKind: null, fromIdx: null, fromSec: null,
+            start(e, kind) {
+                this.dragKind = kind;
+                this.dragEl = e.currentTarget;
+                this.fromIdx = +e.currentTarget.dataset.idx;
+                this.fromSec = e.currentTarget.dataset.sec || null;
+                e.currentTarget.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+            },
+            over(e) { e.preventDefault(); },
+            drop(e, kind) {
+                e.preventDefault();
+                const target = e.currentTarget;
+                const toIdx = +target.dataset.idx;
+                if (kind === 'section') {
+                    const arr = Store.state.sections;
+                    const [moved] = arr.splice(this.fromIdx, 1);
+                    arr.splice(toIdx, 0, moved);
+                    Store.mutate(() => { });
+                } else if (kind === 'item') {
+                    const toSec = target.dataset.sec;
+                    if (toSec !== this.fromSec) return;
+                    const s = Store.section(toSec);
+                    const [moved] = s.items.splice(this.fromIdx, 1);
+                    s.items.splice(toIdx, 0, moved);
+                    Store.mutate(() => { });
+                }
+            },
+            end(e) { e.currentTarget.classList.remove('dragging'); }
+        };
+
+        /* ---------------------------- ATS Scoring ---------------------------- */
+        const ATS = {
+            analyze() {
+                const st = Store.state; let score = 0; const notes = [];
+                const p = st.personal;
+                let contact = 0;['name', 'email', 'phone', 'location'].forEach(k => { if (p[k]) contact++; });
+                score += contact * 4; if (contact < 4) notes.push({ type: 'warn', text: 'Complete all core contact fields (name, email, phone, location).' });
+                const sumWords = st.summary.split(/\s+/).filter(Boolean).length;
+                if (sumWords >= 25 && sumWords <= 90) { score += 10; } else { notes.push({ type: 'warn', text: sumWords === 0 ? 'Add a professional summary (30–60 words).' : 'Tune your summary length to roughly 30–60 words.' }); }
+                const exp = st.sections.find(s => s.type === 'experience');
+                if (exp && exp.items.length) {
+                    score += 15;
+                    const totalBullets = exp.items.reduce((a, it) => a + linesToBullets(it.description).length, 0);
+                    if (totalBullets >= 6) score += 5; else notes.push({ type: 'warn', text: 'Add more bullet points describing your impact in each role.' });
+                } else notes.push({ type: 'bad', text: 'Add at least one Work Experience entry.' });
+                const edu = st.sections.find(s => s.type === 'education');
+                if (edu && edu.items.length) score += 10; else notes.push({ type: 'warn', text: 'Add an Education entry.' });
+                const skl = st.sections.find(s => s.type === 'skills');
+                if (skl && skl.items.some(i => i.items && i.items.trim())) score += 10; else notes.push({ type: 'warn', text: 'List your skills to improve keyword matching.' });
+                const allBullets = st.sections.flatMap(s => s.items.flatMap(it => linesToBullets(it.description || '')));
+                const quantified = allBullets.filter(b => /\d/.test(b)).length;
+                if (allBullets.length && quantified / allBullets.length >= 0.3) { score += 10; } else notes.push({ type: 'warn', text: 'Quantify achievements with numbers (%, counts, time saved).' });
+                const weakHits = allBullets.filter(b => WEAK_VERBS.some(w => b.toLowerCase().includes(w))).length;
+                if (weakHits === 0) score += 10; else notes.push({ type: 'bad', text: `${weakHits} bullet(s) use weak phrasing. Swap in a strong action verb.` });
+                const firstWords = allBullets.map(b => b.trim().split(/\s+/)[0]?.toLowerCase()).filter(Boolean);
+                const counts = {}; firstWords.forEach(w => counts[w] = (counts[w] || 0) + 1);
+                const dupes = Object.entries(counts).filter(([w, c]) => c >= 3);
+                if (!dupes.length) score += 5; else notes.push({ type: 'warn', text: `You start multiple bullets with "${dupes[0][0]}" — vary your action verbs.` });
+                const allText = (st.summary + ' ' + allBullets.join(' ') + ' ' + st.sections.flatMap(s => s.items.map(i => i.technologies || i.items || '')).join(' ')).toLowerCase();
+                const kwHits = ATS_KEYWORDS.filter(k => allText.includes(k.toLowerCase())).length;
+                score += Math.min(5, kwHits);
+
+                score = Math.max(0, Math.min(100, Math.round(score)));
+                return { score, notes };
+            },
+            refreshMini() {
+                const { score } = this.analyze();
+                const el = document.getElementById('score-mini'); if (el) el.textContent = score;
+            },
+            renderFull() {
+                const { score, notes } = this.analyze();
+                const color = score >= 80 ? '#059669' : score >= 55 ? '#EA580C' : '#DC2626';
+                const circumference = 2 * Math.PI * 40;
+                const offset = circumference - (score / 100) * circumference;
+                document.getElementById('score-body').innerHTML = `
+      <div class="flex items-center gap-5 mb-5">
+        <svg width="96" height="96" viewBox="0 0 96 96" class="score-ring">
+          <circle cx="48" cy="48" r="40" stroke="var(--edit-border)" stroke-width="8" fill="none"/>
+          <circle cx="48" cy="48" r="40" stroke="${color}" stroke-width="8" fill="none" stroke-linecap="round"
+            stroke-dasharray="${circumference}" stroke-dashoffset="${offset}" transform="rotate(-90 48 48)"/>
+          <text x="48" y="54" text-anchor="middle" font-size="22" font-weight="700" fill="${color}">${score}</text>
+        </svg>
+        <div>
+          <div class="font-bold text-sm">${score >= 80 ? 'Strong — ready to send' : score >= 55 ? 'Good — a few tweaks left' : 'Needs work before applying'}</div>
+          <div class="text-xs mt-1" style="color:var(--edit-text-dim)">Based on completeness, keyword coverage, and bullet quality.</div>
+        </div>
+      </div>
+      <div class="space-y-2">
+        ${notes.length ? notes.map(n => `
+          <div class="flex items-start gap-2 text-xs p-2.5 rounded-lg" style="background:var(--edit-surface-2)">
+            <span class="mt-0.5">${n.type === 'bad' ? '🔴' : n.type === 'warn' ? 'orange' : 'blue'}</span>
+            <span style="color:var(--edit-text-dim)">${esc(n.text)}</span>
+          </div>`).join('') : `<div class="text-xs" style="color:var(--edit-text-dim)">Everything checks out — nice work!</div>`}
+      </div>
+    `;
+            }
+        };
+
+        /* ---------------------------- IO ---------------------------- */
+        const IO = {
+            exportJSON() {
+                const blob = new Blob([JSON.stringify(Store.state, null, 2)], { type: 'application/json' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = (Store.state.meta.resumeName || 'resume').replace(/\s+/g, '_') + '.json';
+                a.click();
+                Toast.show('Exported JSON');
+            },
+            importJSON(file) {
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = () => {
+                    try {
+                        const data = JSON.parse(reader.result);
+                        if (!data.personal || !data.sections) throw new Error('bad shape');
+                        Store.state = data; History.push(); Render.all(); Persist.save();
+                        Toast.show('Resume imported'); Modal.close('io');
+                    } catch (e) { Toast.show('Invalid resume JSON file'); }
+                };
+                reader.readAsText(file);
+            },
+            resetConfirm() {
+                if (confirm('This will erase all resume content and cannot be undone. Continue?')) {
+                    Store.state = defaultStateBlank(); History.stack = []; History.idx = -1; History.push();
+                    Render.all(); Persist.save(); Modal.close('io'); Toast.show('Resume reset');
+                }
+            }
+        };
+        function defaultStateBlank() {
+            const d = defaultState();
+            d.meta.resumeName = 'Untitled Resume';
+            d.personal = { name: '', title: '', email: '', phone: '', location: '', github: '', linkedin: '', website: '' };
+            d.summary = '';
+            d.sections.forEach(s => { s.items = []; });
+            return d;
         }
 
-        function renderEducationForms() {
-            const container = document.getElementById('edu-form-list');
-            container.innerHTML = '';
-            education.forEach((edu, index) => {
-                container.innerHTML += `
-                    <div class="p-3 border rounded bg-gray-50 space-y-2 relative">
-                        <button onclick="removeEducation(${index})" class="absolute top-2 right-2 text-red-500 text-xs font-bold hover:underline">Delete</button>
-                        <input type="text" value="${edu.degree}" placeholder="Degree / Certificate" class="w-full border p-1 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="education[${index}].degree = this.value; updateResume();">
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" value="${edu.school}" placeholder="School / University" class="border p-1 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="education[${index}].school = this.value; updateResume();">
-                            <input type="text" value="${edu.location}" placeholder="Location" class="border p-1 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="education[${index}].location = this.value; updateResume();">
-                        </div>
-                        <input type="text" value="${edu.dates}" placeholder="Dates" class="w-full border p-1 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="education[${index}].dates = this.value; updateResume();">
-                    </div>
-                `;
-            });
-        }
+        /* ---------------------------- UI Chrome ---------------------------- */
+        const UI = {
+            zoomPct: 78,
+            toggleTheme() { this.setTheme(Store.state.meta.theme === 'dark' ? 'light' : 'dark'); },
+            setTheme(t) {
+                Store.state.meta.theme = t;
+                document.body.setAttribute('data-theme', t);
+                History.push(); Persist.saveDebounced(); Render.settingsIfOpen();
+            },
+            zoom(dir) {
+                this.zoomPct = Math.max(40, Math.min(150, this.zoomPct + dir * 8));
+                this.applyZoom();
+            },
+            zoomFit() {
+                const stageParent = document.getElementById('preview-scroll');
+                if (!stageParent) return;
+                const avail = stageParent.clientWidth - 32;
+                const pageWidthPx = 210 * 3.7795;
+                this.zoomPct = Math.round(Math.max(30, Math.min(120, (avail / pageWidthPx) * 100)));
+                this.applyZoom();
+            },
+            applyZoom() {
+                document.getElementById('preview-stage').style.transform = `scale(${this.zoomPct / 100})`;
+                document.getElementById('zoom-label').textContent = this.zoomPct + '%';
+            },
+            fullscreenPreview() {
+                const el = document.getElementById('resume-preview');
+                if (el.requestFullscreen) el.requestFullscreen();
+            },
+            scrollTo(id) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                document.querySelectorAll('.section-block.collapsed').forEach(sb => { if (sb.id === id) sb.classList.remove('collapsed'); });
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            },
+            toggleAddMenu() { document.getElementById('add-section-menu').classList.toggle('hidden'); }
+        };
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('add-section-menu');
+            if (!menu.contains(e.target) && !e.target.closest('[onclick="UI.toggleAddMenu()"]')) menu.classList.add('hidden');
+        });
 
-        function addExperience() {
-            experiences.push({ role: '', company: '', location: '', dates: '', bullets: '' });
-            renderExperienceForms();
-            updateResume();
-        }
+        /* ---------------------------- Keyboard Shortcuts ---------------------------- */
+        document.addEventListener('keydown', (e) => {
+            const mod = e.ctrlKey || e.metaKey;
+            if (mod && e.key.toLowerCase() === 'z' && !e.shiftKey) { e.preventDefault(); History.undo(); }
+            else if (mod && (e.key.toLowerCase() === 'y' || (e.key.toLowerCase() === 'z' && e.shiftKey))) { e.preventDefault(); History.redo(); }
+            else if (mod && e.key.toLowerCase() === 's') { e.preventDefault(); Persist.save(); Toast.show('Saved'); }
+        });
 
-        function removeExperience(index) {
-            experiences.splice(index, 1);
-            renderExperienceForms();
-            updateResume();
-        }
-
-        function addEducation() {
-            education.push({ degree: '', school: '', location: '', dates: '' });
-            renderEducationForms();
-            updateResume();
-        }
-
-        function removeEducation(index) {
-            education.splice(index, 1);
-            renderEducationForms();
-            updateResume();
-        }
-
-        // Main Update Function
-        function updateResume() {
-            // RSB Watermark Updates
-            const watermarkElem = document.getElementById('out-watermark');
-            const watermarkText = document.getElementById('in-watermark-text').value;
-            const watermarkColor = document.getElementById('in-watermark-color').value;
-            const watermarkOpacity = document.getElementById('in-watermark-opacity').value;
-
-            document.getElementById('color-hex-label').innerText = watermarkColor;
-
-            watermarkElem.innerText = watermarkText || "RSB";
-            watermarkElem.style.color = watermarkColor;
-            watermarkElem.style.opacity = watermarkOpacity;
-
-            // Details Updates
-            document.getElementById('out-name').innerText = document.getElementById('in-name').value || "YOUR NAME";
-            document.getElementById('out-title').innerText = document.getElementById('in-title').value;
-            document.getElementById('out-email').innerText = document.getElementById('in-email').value;
-            document.getElementById('out-phone').innerText = document.getElementById('in-phone').value;
-            document.getElementById('out-location').innerText = document.getElementById('in-location').value;
-
-            const githubVal = document.getElementById('in-github').value;
-            document.getElementById('out-github').innerText = githubVal.replace(/^https?:\/\//, '');
-
-            const linkedinVal = document.getElementById('in-linkedin').value;
-            document.getElementById('out-linkedin').innerText = linkedinVal.replace(/^https?:\/\//, '');
-
-            document.getElementById('out-summary').innerText = document.getElementById('in-summary').value;
-
-            // Experience Rendering
-            const expOutput = document.getElementById('out-experience-list');
-            expOutput.innerHTML = '';
-            experiences.forEach(exp => {
-                const bulletList = exp.bullets.split('\n').filter(b => b.trim() !== '').map(b => `<li class="ml-4 list-disc">${b.trim()}</li>`).join('');
-                expOutput.innerHTML += `
-                    <div>
-                        <div class="flex justify-between font-bold text-sm">
-                            <span>${exp.role || 'Job Title'} <span class="font-normal italic">| ${exp.company || 'Company Name'}</span></span>
-                            <span>${exp.dates || 'Dates'}</span>
-                        </div>
-                        <div class="text-xs text-gray-500 mb-1">${exp.location || ''}</div>
-                        <ul class="text-sm space-y-1 text-gray-800">${bulletList}</ul>
-                    </div>
-                `;
-            });
-
-            // Education Rendering
-            const eduOutput = document.getElementById('out-education-list');
-            eduOutput.innerHTML = '';
-            education.forEach(edu => {
-                eduOutput.innerHTML += `
-                    <div class="flex justify-between text-sm">
-                        <div>
-                            <strong class="font-bold">${edu.degree || 'Degree'}</strong>, ${edu.school || 'School'} <span class="text-gray-500 text-xs">(${edu.location || ''})</span>
-                        </div>
-                        <div class="font-medium">${edu.dates || ''}</div>
-                    </div>
-                `;
-            });
-
-            // Skills Rendering
-            document.getElementById('out-skills-tech').innerText = document.getElementById('in-skills-tech').value;
-            document.getElementById('out-skills-tools').innerText = document.getElementById('in-skills-tools').value;
-        }
+        /* ---------------------------- Boot ---------------------------- */
+        window.addEventListener('load', () => {
+            Store.init();
+            document.body.setAttribute('data-theme', Store.state.meta.theme || 'light');
+            History.push();
+            Render.all();
+            UI.zoomFit();
+            Toast.saved();
+            window.addEventListener('resize', debounce(() => { UI.zoomFit(); }, 150));
+        });
     </script>
 </body>
 
