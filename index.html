@@ -30,10 +30,10 @@
             --shadow-md: 0 8px 24px -8px rgba(20, 20, 15, .14), 0 2px 6px -2px rgba(20, 20, 15, .06);
             --shadow-lg: 0 24px 60px -18px rgba(20, 20, 15, .28);
             --pv-font: 'Calibri', 'Arial', sans-serif;
-            --pv-size: 10.5pt;
-            --pv-line: 1.42;
-            --pv-sec-gap: 14px;
-            --pv-margin: 16mm;
+            --pv-size: 10pt;
+            --pv-line: 1.38;
+            --pv-sec-gap: 12px;
+            --pv-margin: 14mm;
             --pv-heading: normal;
         }
 
@@ -48,12 +48,12 @@
         }
 
         * {
-            box-sizing: border-box
+            box-sizing: border-box;
         }
 
         html,
         body {
-            height: 100%
+            height: 100%;
         }
 
         body {
@@ -288,7 +288,7 @@
             color: #d97706;
         }
 
-        /* checkbox */
+        /* Checkbox */
         .chk {
             display: inline-flex;
             align-items: center;
@@ -306,7 +306,7 @@
             cursor: pointer;
         }
 
-        /* Cards / sections */
+        /* Item Cards */
         .item-card {
             background: var(--edit-surface);
             border: 1px solid var(--edit-border);
@@ -475,18 +475,11 @@
         }
 
         @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1
-            }
-
-            50% {
-                opacity: .35
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: .35; }
         }
 
-        /* Zoom preview stage - Fixed Transform Scaling Bounds */
+        /* Zoom preview stage */
         #preview-stage {
             transform-origin: top center;
             transition: transform .18s ease;
@@ -503,17 +496,18 @@
             transition: stroke-dashoffset .5s ease;
         }
 
-        /* Resume page - ATS SAFE styling only */
+        /* Resume Page Styling — ATS Optimized */
         .resume-page {
             font-family: var(--pv-font);
             font-size: var(--pv-size);
             line-height: var(--pv-line);
-            color: #161616;
+            color: #111111;
             padding: var(--pv-margin);
             width: 210mm;
             min-height: 297mm;
             position: relative;
             background: #ffffff;
+            box-sizing: border-box;
         }
 
         .resume-page h1.rname {
@@ -529,14 +523,18 @@
             letter-spacing: .06em;
         }
 
+        /* Explicit Bullet Points Restoration */
         .resume-page ul {
-            margin: 0;
-            padding: 0;
+            margin: 4px 0 0 0;
+            padding-left: 18px;
+            list-style-type: disc !important;
         }
 
         .resume-page li {
-            margin-left: 1.1em;
-            padding-left: .1em;
+            margin-bottom: 2px;
+            padding-left: 2px;
+            display: list-item !important;
+            list-style-type: disc !important;
         }
 
         .brand-watermark {
@@ -551,7 +549,7 @@
             pointer-events: none;
         }
 
-        /* ---- Template skins ---- */
+        /* Template Skins */
         [data-tpl="classic"] .rname {
             text-align: center;
             font-weight: 700;
@@ -561,31 +559,31 @@
         [data-tpl="classic"] .rheader {
             text-align: center;
             border-bottom: 1.5px solid #222;
-            padding-bottom: 12px;
+            padding-bottom: 10px;
         }
 
         [data-tpl="classic"] .rsec h2 {
             text-align: left;
-            border-bottom: 1px solid #999;
-            padding-bottom: 4px;
+            border-bottom: 1px solid #777;
+            padding-bottom: 3px;
             text-transform: uppercase;
             font-weight: 700;
         }
 
         [data-tpl="modern"] .rheader {
             border-bottom: none;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
         }
 
         [data-tpl="modern"] .rname {
             font-weight: 800;
-            color: #161616;
+            color: #111;
         }
 
         [data-tpl="modern"] .rsec h2 {
             color: var(--rv-accent);
             border-bottom: 2px solid var(--rv-accent);
-            padding-bottom: 5px;
+            padding-bottom: 3px;
             font-weight: 700;
             text-transform: uppercase;
             display: inline-block;
@@ -610,13 +608,9 @@
             font-size: .85em;
         }
 
-        [data-tpl="minimal"] .rsec {
-            margin-bottom: calc(var(--pv-sec-gap) + 4px);
-        }
-
         [data-tpl="executive"] .rheader {
             border-bottom: 3px double #222;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
         }
 
         [data-tpl="executive"] .rname {
@@ -634,12 +628,12 @@
         }
 
         [data-tpl="technical"] .resume-page {
-            font-size: calc(var(--pv-size) - .8pt);
+            font-size: calc(var(--pv-size) - .5pt);
         }
 
         [data-tpl="technical"] .rheader {
             border-bottom: 1px solid #333;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
         }
 
         [data-tpl="technical"] .rname {
@@ -652,18 +646,14 @@
             font-size: .92em;
             color: #222;
             border-bottom: 1px dashed #999;
-            padding-bottom: 3px;
-        }
-
-        [data-tpl="technical"] .rsec {
-            margin-bottom: calc(var(--pv-sec-gap) - 4px);
+            padding-bottom: 2px;
         }
 
         [data-tpl="corporate"] .rheader {
             background: var(--rv-accent-08);
-            padding: 14px 16px;
+            padding: 12px 14px;
             border-bottom: none;
-            margin: calc(var(--pv-margin) * -1) calc(var(--pv-margin) * -1) 14px calc(var(--pv-margin) * -1);
+            margin: calc(var(--pv-margin) * -1) calc(var(--pv-margin) * -1) 12px calc(var(--pv-margin) * -1);
             width: calc(100% + var(--pv-margin) * 2);
             padding-left: var(--pv-margin);
             padding-right: var(--pv-margin);
@@ -679,7 +669,7 @@
             text-transform: uppercase;
             color: var(--rv-accent);
             border-bottom: 1px solid var(--rv-accent);
-            padding-bottom: 4px;
+            padding-bottom: 3px;
         }
 
         [data-tpl="academic"] .resume-page {
@@ -689,20 +679,14 @@
         [data-tpl="academic"] .rheader {
             text-align: center;
             border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        [data-tpl="academic"] .rname {
-            font-weight: 700;
-            text-transform: none;
-            font-size: 1.5em;
+            padding-bottom: 8px;
         }
 
         [data-tpl="academic"] .rsec h2 {
             font-weight: 700;
             font-style: italic;
             border-bottom: 1px solid #666;
-            padding-bottom: 3px;
+            padding-bottom: 2px;
         }
 
         [data-tpl="creative"] .rheader {
@@ -727,40 +711,49 @@
             content: "";
             position: absolute;
             left: 0;
-            top: 2px;
+            top: 4px;
             width: 6px;
             height: 6px;
             background: var(--rv-accent);
             border-radius: 99px;
         }
 
+        /* Standardized Print Overrides */
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
         @media print {
-            body {
-                background: #fff;
+            html, body {
+                background: #ffffff !important;
+                height: auto !important;
+                overflow: visible !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
 
             .no-print {
                 display: none !important;
             }
 
-            .print-area {
-                box-shadow: none !important;
-                border: none !important;
+            #app-root, #preview-scroll, #preview-stage {
+                display: block !important;
                 width: 100% !important;
+                height: auto !important;
+                overflow: visible !important;
                 margin: 0 !important;
+                padding: 0 !important;
                 transform: none !important;
             }
 
-            #app-root {
-                display: block !important;
-                height: auto !important;
-                overflow: visible !important;
-            }
-
-            #preview-scroll {
-                overflow: visible !important;
-                height: auto !important;
-                padding: 0 !important;
+            .resume-page {
+                width: 210mm !important;
+                min-height: 297mm !important;
+                margin: 0 auto !important;
+                box-shadow: none !important;
+                border: none !important;
+                page-break-after: avoid;
             }
 
             * {
@@ -768,12 +761,7 @@
                 print-color-adjust: exact !important;
             }
 
-            .resume-page {
-                min-height: 0 !important;
-            }
-
-            .item-card,
-            .rsec {
+            .rsec, .rsec > div {
                 break-inside: avoid;
             }
         }
@@ -851,7 +839,7 @@
     <!-- ============================= APP BODY ============================= -->
     <div id="app-root" class="flex-1 flex overflow-hidden">
 
-        <!-- LEFT: Section navigator -->
+        <!-- LEFT: Section Navigator -->
         <aside class="no-print w-[248px] shrink-0 border-r flex flex-col"
             style="border-color:var(--edit-border); background:var(--edit-surface);">
             <div class="px-4 pt-4 pb-2 flex items-center justify-between">
@@ -859,8 +847,7 @@
                     style="color:var(--edit-text-faint);">Sections</span>
                 <div class="relative">
                     <button class="icon-btn" onclick="UI.toggleAddMenu()" title="Add section">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2.2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                             <path d="M12 5v14M5 12h14" />
                         </svg>
                     </button>
@@ -882,12 +869,12 @@
             </div>
         </aside>
 
-        <!-- CENTER: Form editor -->
+        <!-- CENTER: Form Editor -->
         <main id="form-scroll" class="flex-1 min-w-0 overflow-y-auto custom-scroll no-print">
             <div class="max-w-[720px] mx-auto px-6 py-8 space-y-5" id="form-root"></div>
         </main>
 
-        <!-- RIGHT: Live preview -->
+        <!-- RIGHT: Live Preview -->
         <section class="w-[48%] min-w-[460px] shrink-0 border-l flex flex-col"
             style="border-color:var(--edit-border); background:var(--edit-surface-2);">
             <div class="no-print h-12 shrink-0 flex items-center justify-between px-4 border-b"
@@ -913,22 +900,18 @@
                         style="color:var(--edit-text-dim);">80%</span>
                     <button class="icon-btn" onclick="UI.zoom(1)" title="Zoom in">+</button>
                     <button class="icon-btn" onclick="UI.zoomFit()" title="Fit width">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
                         </svg>
                     </button>
                     <button class="icon-btn" onclick="UI.fullscreenPreview()" title="Fullscreen preview">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path
-                                d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
                         </svg>
                     </button>
                 </div>
             </div>
-            <div id="preview-scroll"
-                class="flex-1 overflow-y-auto custom-scroll py-8 px-4 flex justify-center items-start">
+            <div id="preview-scroll" class="flex-1 overflow-y-auto custom-scroll py-8 px-4 flex justify-center items-start">
                 <div id="preview-stage">
                     <div id="resume-preview" class="print-area resume-page page-shadow" data-tpl="modern">
                         <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0"
@@ -946,10 +929,9 @@
 
     <!-- ============================= MODALS ============================= -->
     <div class="modal-backdrop no-print" id="modal-settings">
-        <div class="modal-box w-[520px] max-h-[85vh] overflow-y-auto custom-scroll p-6"
-            onclick="event.stopPropagation()">
+        <div class="modal-box w-[520px] max-h-[85vh] overflow-y-auto custom-scroll p-6" onclick="event.stopPropagation()">
             <div class="flex items-center justify-between mb-5">
-                <h3 class="font-bold text-base font-display">Design settings</h3>
+                <h3 class="font-bold text-base font-display">Design Settings</h3>
                 <button class="icon-btn" onclick="Modal.close('settings')">✕</button>
             </div>
             <div class="space-y-5" id="settings-body"></div>
@@ -964,20 +946,16 @@
             </div>
             <div class="space-y-3">
                 <button class="btn btn-outline w-full justify-center" onclick="IO.exportJSON()">Export as JSON</button>
-                <button class="btn btn-outline w-full justify-center"
-                    onclick="document.getElementById('import-file').click()">Import from JSON</button>
-                <input type="file" id="import-file" accept="application/json" class="hidden"
-                    onchange="IO.importJSON(this.files[0])">
+                <button class="btn btn-outline w-full justify-center" onclick="document.getElementById('import-file').click()">Import from JSON</button>
+                <input type="file" id="import-file" accept="application/json" class="hidden" onchange="IO.importJSON(this.files[0])">
                 <div class="h-px my-2" style="background:var(--edit-border);"></div>
-                <button class="btn btn-outline w-full justify-center text-red-600" onclick="IO.resetConfirm()">Reset
-                    resume to blank</button>
+                <button class="btn btn-outline w-full justify-center text-red-600" onclick="IO.resetConfirm()">Reset Resume to Blank</button>
             </div>
         </div>
     </div>
 
     <div class="modal-backdrop no-print" id="modal-score">
-        <div class="modal-box w-[480px] max-h-[80vh] overflow-y-auto custom-scroll p-6"
-            onclick="event.stopPropagation()">
+        <div class="modal-box w-[480px] max-h-[80vh] overflow-y-auto custom-scroll p-6" onclick="event.stopPropagation()">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="font-bold text-base font-display">ATS Resume Score</h3>
                 <button class="icon-btn" onclick="Modal.close('score')">✕</button>
@@ -999,8 +977,8 @@
         function defaultState() {
             return {
                 meta: {
-                    resumeName: 'Untitled Resume', template: 'modern', theme: 'light', accent: 'blue',
-                    font: 'Calibri', fontSize: 10.5, lineSpacing: 1.42, sectionSpacing: 14, margin: 16, headingStyle: 'normal'
+                    resumeName: 'Rishabh Bairagi Resume', template: 'modern', theme: 'light', accent: 'blue',
+                    font: 'Calibri', fontSize: 10, lineSpacing: 1.38, sectionSpacing: 12, margin: 14, headingStyle: 'normal'
                 },
                 personal: {
                     name: 'RISHABH BAIRAGI', title: 'Mobile Engineer | Flutter & Clean Architecture',
@@ -1226,6 +1204,7 @@
                 empty: () => ({ title: '', subtitle: '', date: '', description: '' })
             }
         };
+
         const ICONS = {
             briefcase: '<path d="M20 7h-4V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v3H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zM10 4h4v3h-4z"/>',
             cap: '<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.66 3 3 6 3s6-1.34 6-3v-5"/>',
@@ -1424,19 +1403,24 @@
                 pv.setAttribute('data-tpl', m.template);
 
                 const p = st.personal;
-                const contactParts = [p.email, p.phone, p.location,
-                p.github ? p.github.replace(/^https?:\/\//, '') : '', p.linkedin ? p.linkedin.replace(/^https?:\/\//, '') : '', p.website ? p.website.replace(/^https?:\/\//, '') : '']
-                    .filter(Boolean);
+                const contactParts = [
+                    p.email, 
+                    p.phone, 
+                    p.location,
+                    p.github ? p.github.replace(/^https?:\/\//, '') : '', 
+                    p.linkedin ? p.linkedin.replace(/^https?:\/\//, '') : '', 
+                    p.website ? p.website.replace(/^https?:\/\//, '') : ''
+                ].filter(Boolean);
 
                 let body = `
-      <div class="rheader mb-4">
+      <div class="rheader mb-3">
         <h1 class="rname text-2xl">${esc(p.name) || 'YOUR NAME'}</h1>
-        ${p.title ? `<p class="text-[1.02em] mt-1" style="color:#333;">${esc(p.title)}</p>` : ''}
-        ${contactParts.length ? `<div class="text-[.92em] mt-2" style="color:#444;">${contactParts.map(esc).join('  |  ')}</div>` : ''}
+        ${p.title ? `<p class="text-[1.02em] font-medium mt-0.5" style="color:#333;">${esc(p.title)}</p>` : ''}
+        ${contactParts.length ? `<div class="text-[.9em] mt-1.5 leading-snug" style="color:#444;">${contactParts.map(esc).join(' &nbsp;|&nbsp; ')}</div>` : ''}
       </div>`;
 
                 if (st.summary && st.summary.trim()) {
-                    body += `<div class="rsec"><h2>Professional Summary</h2><p style="text-align:justify;">${esc(st.summary)}</p></div>`;
+                    body += `<div class="rsec"><h2>Professional Summary</h2><p style="text-align:justify; margin-top:3px;">${esc(st.summary)}</p></div>`;
                 }
 
                 st.sections.filter(s => s.visible).forEach(s => { body += Render.previewSection(s); });
@@ -1449,53 +1433,53 @@
                 if (!s.items.length) return '';
                 const title = esc(s.title);
                 switch (s.type) {
-                    case 'experience': return `<div class="rsec"><h2>${title}</h2><div class="space-y-3 mt-2">${s.items.map(it => `
+                    case 'experience': return `<div class="rsec"><h2>${title}</h2><div class="space-y-2.5 mt-1.5">${s.items.map(it => `
         <div>
           <div class="flex justify-between items-baseline flex-wrap gap-x-2">
-            <span class="font-bold">${esc(it.role) || 'Job Title'} <span class="font-normal italic">— ${esc(it.company) || 'Company'}</span></span>
-            <span class="text-[.9em]" style="color:#444;">${esc(it.startDate)}${it.startDate || it.endDate ? ' – ' : ''}${it.current ? 'Present' : esc(it.endDate)}</span>
+            <span class="font-bold text-[.98em]">${esc(it.role) || 'Job Title'} <span class="font-normal italic">— ${esc(it.company) || 'Company'}</span></span>
+            <span class="text-[.88em] font-medium whitespace-nowrap" style="color:#444;">${esc(it.startDate)}${it.startDate || it.endDate ? ' – ' : ''}${it.current ? 'Present' : esc(it.endDate)}</span>
           </div>
-          <div class="text-[.85em] mb-1" style="color:#555;">${[it.location, it.employmentType].filter(Boolean).map(esc).join(' · ')}</div>
-          ${it.description ? `<ul class="text-[.95em]">${linesToBullets(it.description).map(b => `<li>${esc(b)}</li>`).join('')}</ul>` : ''}
+          <div class="text-[.85em] mb-0.5" style="color:#555;">${[it.location, it.employmentType].filter(Boolean).map(esc).join(' · ')}</div>
+          ${it.description ? `<ul class="text-[.92em]">${linesToBullets(it.description).map(b => `<li>${esc(b)}</li>`).join('')}</ul>` : ''}
           ${it.technologies ? `<div class="text-[.85em] mt-1" style="color:#555;"><em>Technologies:</em> ${esc(it.technologies)}</div>` : ''}
         </div>`).join('')}</div></div>`;
 
-                    case 'education': return `<div class="rsec"><h2>${title}</h2><div class="space-y-2 mt-2">${s.items.map(it => `
+                    case 'education': return `<div class="rsec"><h2>${title}</h2><div class="space-y-1.5 mt-1.5">${s.items.map(it => `
         <div class="flex justify-between flex-wrap gap-x-2">
-          <div><span class="font-bold">${esc(it.degree) || 'Degree'}</span>, ${esc(it.school) || 'School'} <span class="text-[.85em]" style="color:#555;">${it.location ? `(${esc(it.location)})` : ''}</span>
+          <div><span class="font-bold text-[.98em]">${esc(it.degree) || 'Degree'}</span>, ${esc(it.school) || 'School'} <span class="text-[.85em]" style="color:#555;">${it.location ? `(${esc(it.location)})` : ''}</span>
             ${(it.cgpa || it.percentage) ? `<div class="text-[.85em]" style="color:#555;">${it.cgpa ? `CGPA: ${esc(it.cgpa)}` : ''}${it.cgpa && it.percentage ? ' · ' : ''}${it.percentage ? `Percentage: ${esc(it.percentage)}` : ''}</div>` : ''}
           </div>
-          <div class="text-[.9em] whitespace-nowrap" style="color:#444;">${esc(it.startDate)}${it.startDate || it.endDate ? ' – ' : ''}${esc(it.endDate)}</div>
+          <div class="text-[.88em] font-medium whitespace-nowrap" style="color:#444;">${esc(it.startDate)}${it.startDate || it.endDate ? ' – ' : ''}${esc(it.endDate)}</div>
         </div>`).join('')}</div></div>`;
 
-                    case 'projects': return `<div class="rsec"><h2>${title}</h2><div class="space-y-3 mt-2">${s.items.map(it => `
+                    case 'projects': return `<div class="rsec"><h2>${title}</h2><div class="space-y-2.5 mt-1.5">${s.items.map(it => `
         <div>
           <div class="flex justify-between flex-wrap gap-x-2">
-            <span class="font-bold">${esc(it.title) || 'Project'}${it.role ? ` <span class="font-normal italic">— ${esc(it.role)}</span>` : ''}</span>
-            <span class="text-[.9em]" style="color:#444;">${esc(it.duration)}</span>
+            <span class="font-bold text-[.98em]">${esc(it.title) || 'Project'}${it.role ? ` <span class="font-normal italic">— ${esc(it.role)}</span>` : ''}</span>
+            <span class="text-[.88em] font-medium whitespace-nowrap" style="color:#444;">${esc(it.duration)}</span>
           </div>
-          ${it.description ? `<ul class="text-[.95em]">${linesToBullets(it.description).map(b => `<li>${esc(b)}</li>`).join('')}</ul>` : ''}
-          ${it.achievements ? `<div class="text-[.9em]">${esc(it.achievements)}</div>` : ''}
-          <div class="text-[.85em]" style="color:#555;">${[it.technologies, it.github, it.live].filter(Boolean).map(esc).join(' · ')}</div>
+          ${it.description ? `<ul class="text-[.92em]">${linesToBullets(it.description).map(b => `<li>${esc(b)}</li>`).join('')}</ul>` : ''}
+          ${it.achievements ? `<div class="text-[.9em] mt-0.5">${esc(it.achievements)}</div>` : ''}
+          <div class="text-[.85em] mt-0.5" style="color:#555;">${[it.technologies, it.github, it.live].filter(Boolean).map(esc).join(' · ')}</div>
         </div>`).join('')}</div></div>`;
 
-                    case 'skills': return `<div class="rsec"><h2>${title}</h2><div class="text-[.95em] space-y-1 mt-2">${s.items.filter(it => it.category || it.items).map(it => `
+                    case 'skills': return `<div class="rsec"><h2>${title}</h2><div class="text-[.92em] space-y-1 mt-1.5">${s.items.filter(it => it.category || it.items).map(it => `
         <div><strong class="font-semibold">${esc(it.category) || 'Skills'}:</strong> ${esc(it.items)}</div>`).join('')}</div></div>`;
 
-                    case 'certificates': return `<div class="rsec"><h2>${title}</h2><div class="space-y-1.5 mt-2">${s.items.map(it => `
-        <div class="flex justify-between flex-wrap gap-x-2 text-[.95em]"><span><strong>${esc(it.title)}</strong>${it.issuer ? ` — ${esc(it.issuer)}` : ''}</span><span style="color:#444;">${esc(it.date)}</span></div>`).join('')}</div></div>`;
+                    case 'certificates': return `<div class="rsec"><h2>${title}</h2><div class="space-y-1 mt-1.5">${s.items.map(it => `
+        <div class="flex justify-between flex-wrap gap-x-2 text-[.92em]"><span><strong>${esc(it.title)}</strong>${it.issuer ? ` — ${esc(it.issuer)}` : ''}</span><span style="color:#444;">${esc(it.date)}</span></div>`).join('')}</div></div>`;
 
-                    case 'achievements': return `<div class="rsec"><h2>${title}</h2><ul class="text-[.95em] mt-2">${s.items.map(it => `
+                    case 'achievements': return `<div class="rsec"><h2>${title}</h2><ul class="text-[.92em] mt-1.5">${s.items.map(it => `
         <li><strong>${esc(it.title)}</strong>${it.date ? ` (${esc(it.date)})` : ''}${it.description ? ` — ${esc(it.description)}` : ''}</li>`).join('')}</ul></div>`;
 
-                    case 'languages': return `<div class="rsec"><h2>${title}</h2><div class="text-[.95em] mt-2">${s.items.map(it => `${esc(it.name)} (${esc(it.proficiency)})`).join(' · ')}</div></div>`;
+                    case 'languages': return `<div class="rsec"><h2>${title}</h2><div class="text-[.92em] mt-1.5">${s.items.map(it => `${esc(it.name)} (${esc(it.proficiency)})`).join(' · ')}</div></div>`;
 
-                    case 'interests': return `<div class="rsec"><h2>${title}</h2><div class="text-[.95em] mt-2">${s.items.map(it => esc(it.name)).filter(Boolean).join(' · ')}</div></div>`;
+                    case 'interests': return `<div class="rsec"><h2>${title}</h2><div class="text-[.92em] mt-1.5">${s.items.map(it => esc(it.name)).filter(Boolean).join(' · ')}</div></div>`;
 
-                    case 'custom': return `<div class="rsec"><h2>${title}</h2><div class="space-y-2 mt-2">${s.items.map(it => `
+                    case 'custom': return `<div class="rsec"><h2>${title}</h2><div class="space-y-1.5 mt-1.5">${s.items.map(it => `
         <div class="flex justify-between flex-wrap gap-x-2">
-          <div><span class="font-bold">${esc(it.title)}</span>${it.subtitle ? ` — ${esc(it.subtitle)}` : ''}${it.description ? `<div class="text-[.95em]">${esc(it.description)}</div>` : ''}</div>
-          <div class="text-[.9em]" style="color:#444;">${esc(it.date)}</div>
+          <div><span class="font-bold text-[.98em]">${esc(it.title)}</span>${it.subtitle ? ` — ${esc(it.subtitle)}` : ''}${it.description ? `<div class="text-[.92em]">${esc(it.description)}</div>` : ''}</div>
+          <div class="text-[.88em] font-medium whitespace-nowrap" style="color:#444;">${esc(it.date)}</div>
         </div>`).join('')}</div></div>`;
                     default: return '';
                 }
@@ -1509,11 +1493,11 @@
         <div class="text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--edit-text-faint);">Theme</div>
         <div class="flex gap-2">
           <button class="btn ${m.theme === 'light' ? 'btn-primary' : 'btn-outline'} flex-1 justify-center" onclick="UI.setTheme('light')">Light</button>
-          <button class="btn ${m.theme === 'dark' ? 'btn-primary' : 'btn-outline'} flex-1 justify-center" onclick="UI.setTheme('dark')">Dark editor</button>
+          <button class="btn ${m.theme === 'dark' ? 'btn-primary' : 'btn-outline'} flex-1 justify-center" onclick="UI.setTheme('dark')">Dark Editor</button>
         </div>
       </div>
       <div>
-        <div class="text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--edit-text-faint);">Accent color</div>
+        <div class="text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--edit-text-faint);">Accent Color</div>
         <div class="flex gap-2">
           ${Object.entries(ACCENTS).map(([name, hex]) => `
             <button title="${name}" class="w-8 h-8 rounded-full border-2 ${m.accent === name ? 'border-[var(--edit-text)]' : 'border-transparent'}" style="background:${hex}" onclick="Store.set('meta.accent','${name}')"></button>
@@ -1527,13 +1511,13 @@
         </select>
       </div>
       <div class="grid grid-cols-2 gap-4">
-        ${rangeRow('Font size', 'meta.fontSize', m.fontSize, 8.5, 13, 0.5, 'pt')}
+        ${rangeRow('Font size', 'meta.fontSize', m.fontSize, 8.5, 12, 0.5, 'pt')}
         ${rangeRow('Line spacing', 'meta.lineSpacing', m.lineSpacing, 1.1, 1.8, 0.02, '×')}
-        ${rangeRow('Section spacing', 'meta.sectionSpacing', m.sectionSpacing, 6, 28, 1, 'px')}
-        ${rangeRow('Page margins', 'meta.margin', m.margin, 8, 28, 1, 'mm')}
+        ${rangeRow('Section spacing', 'meta.sectionSpacing', m.sectionSpacing, 6, 24, 1, 'px')}
+        ${rangeRow('Page margins', 'meta.margin', m.margin, 8, 24, 1, 'mm')}
       </div>
       <div class="p-3 rounded-lg text-xs" style="background:var(--edit-surface-2); color:var(--edit-text-dim);">
-        Tip: Templates and colors only change the visual style — the underlying text stays single-column and screen-reader friendly for ATS parsing.
+        Tip: Templates and spacing change visual output while keeping pure single-column structure for 100% ATS score.
       </div>
     `;
             },
@@ -1652,29 +1636,29 @@
             analyze() {
                 const st = Store.state; let score = 0; const notes = [];
                 const p = st.personal;
-                let contact = 0;['name', 'email', 'phone', 'location'].forEach(k => { if (p[k]) contact++; });
-                score += contact * 4; if (contact < 4) notes.push({ type: 'warn', text: 'Complete all core contact fields (name, email, phone, location).' });
+                let contact = 0; ['name', 'email', 'phone', 'location'].forEach(k => { if (p[k]) contact++; });
+                score += contact * 4; if (contact < 4) notes.push({ type: 'warn', text: 'Complete core contact details (name, email, phone, location).' });
                 const sumWords = st.summary.split(/\s+/).filter(Boolean).length;
-                if (sumWords >= 25 && sumWords <= 90) { score += 10; } else { notes.push({ type: 'warn', text: sumWords === 0 ? 'Add a professional summary (30–60 words).' : 'Tune your summary length to roughly 30–60 words.' }); }
+                if (sumWords >= 25 && sumWords <= 90) { score += 10; } else { notes.push({ type: 'warn', text: sumWords === 0 ? 'Add a professional summary (30–60 words).' : 'Adjust summary length to roughly 30–60 words.' }); }
                 const exp = st.sections.find(s => s.type === 'experience');
                 if (exp && exp.items.length) {
                     score += 15;
                     const totalBullets = exp.items.reduce((a, it) => a + linesToBullets(it.description).length, 0);
-                    if (totalBullets >= 6) score += 5; else notes.push({ type: 'warn', text: 'Add more bullet points describing your impact in each role.' });
+                    if (totalBullets >= 6) score += 5; else notes.push({ type: 'warn', text: 'Add more bullet points describing role impact.' });
                 } else notes.push({ type: 'bad', text: 'Add at least one Work Experience entry.' });
                 const edu = st.sections.find(s => s.type === 'education');
                 if (edu && edu.items.length) score += 10; else notes.push({ type: 'warn', text: 'Add an Education entry.' });
                 const skl = st.sections.find(s => s.type === 'skills');
-                if (skl && skl.items.some(i => i.items && i.items.trim())) score += 10; else notes.push({ type: 'warn', text: 'List your skills to improve keyword matching.' });
+                if (skl && skl.items.some(i => i.items && i.items.trim())) score += 10; else notes.push({ type: 'warn', text: 'List key technical skills.' });
                 const allBullets = st.sections.flatMap(s => s.items.flatMap(it => linesToBullets(it.description || '')));
                 const quantified = allBullets.filter(b => /\d/.test(b)).length;
-                if (allBullets.length && quantified / allBullets.length >= 0.3) { score += 10; } else notes.push({ type: 'warn', text: 'Quantify achievements with numbers (%, counts, time saved).' });
+                if (allBullets.length && quantified / allBullets.length >= 0.3) { score += 10; } else notes.push({ type: 'warn', text: 'Quantify metrics in bullets (%, counts, time saved).' });
                 const weakHits = allBullets.filter(b => WEAK_VERBS.some(w => b.toLowerCase().includes(w))).length;
-                if (weakHits === 0) score += 10; else notes.push({ type: 'bad', text: `${weakHits} bullet(s) use weak phrasing. Swap in a strong action verb.` });
+                if (weakHits === 0) score += 10; else notes.push({ type: 'bad', text: `${weakHits} bullet(s) use passive verbs. Use strong action verbs.` });
                 const firstWords = allBullets.map(b => b.trim().split(/\s+/)[0]?.toLowerCase()).filter(Boolean);
                 const counts = {}; firstWords.forEach(w => counts[w] = (counts[w] || 0) + 1);
                 const dupes = Object.entries(counts).filter(([w, c]) => c >= 3);
-                if (!dupes.length) score += 5; else notes.push({ type: 'warn', text: `You start multiple bullets with "${dupes[0][0]}" — vary your action verbs.` });
+                if (!dupes.length) score += 5; else notes.push({ type: 'warn', text: `Multiple bullets start with "${dupes[0][0]}" — vary phrasing.` });
                 const allText = (st.summary + ' ' + allBullets.join(' ') + ' ' + st.sections.flatMap(s => s.items.map(i => i.technologies || i.items || '')).join(' ')).toLowerCase();
                 const kwHits = ATS_KEYWORDS.filter(k => allText.includes(k.toLowerCase())).length;
                 score += Math.min(5, kwHits);
@@ -1700,16 +1684,16 @@
           <text x="48" y="54" text-anchor="middle" font-size="22" font-weight="700" fill="${color}">${score}</text>
         </svg>
         <div>
-          <div class="font-bold text-sm">${score >= 80 ? 'Strong — ready to send' : score >= 55 ? 'Good — a few tweaks left' : 'Needs work before applying'}</div>
-          <div class="text-xs mt-1" style="color:var(--edit-text-dim)">Based on completeness, keyword coverage, and bullet quality.</div>
+          <div class="font-bold text-sm">${score >= 80 ? 'Strong — ready to apply' : score >= 55 ? 'Good — ready for minor tweaks' : 'Needs improvement'}</div>
+          <div class="text-xs mt-1" style="color:var(--edit-text-dim)">Calculated from completeness, formatting structure, and keyword density.</div>
         </div>
       </div>
       <div class="space-y-2">
         ${notes.length ? notes.map(n => `
           <div class="flex items-start gap-2 text-xs p-2.5 rounded-lg" style="background:var(--edit-surface-2)">
-            <span class="mt-0.5">${n.type === 'bad' ? '🔴' : n.type === 'warn' ? 'orange' : 'blue'}</span>
+            <span class="mt-0.5">${n.type === 'bad' ? '🔴' : n.type === 'warn' ? '🟠' : '🔵'}</span>
             <span style="color:var(--edit-text-dim)">${esc(n.text)}</span>
-          </div>`).join('') : `<div class="text-xs" style="color:var(--edit-text-dim)">Everything checks out — nice work!</div>`}
+          </div>`).join('') : `<div class="text-xs" style="color:var(--edit-text-dim)">All ATS checks passed!</div>`}
       </div>
     `;
             }
@@ -1731,7 +1715,7 @@
                 reader.onload = () => {
                     try {
                         const data = JSON.parse(reader.result);
-                        if (!data.personal || !data.sections) throw new Error('bad shape');
+                        if (!data.personal || !data.sections) throw new Error('invalid format');
                         Store.state = data; History.push(); Render.all(); Persist.save();
                         Toast.show('Resume imported'); Modal.close('io');
                     } catch (e) { Toast.show('Invalid resume JSON file'); }
@@ -1739,7 +1723,7 @@
                 reader.readAsText(file);
             },
             resetConfirm() {
-                if (confirm('This will erase all resume content and cannot be undone. Continue?')) {
+                if (confirm('This will erase all resume content. Continue?')) {
                     Store.state = defaultStateBlank(); History.stack = []; History.idx = -1; History.push();
                     Render.all(); Persist.save(); Modal.close('io'); Toast.show('Resume reset');
                 }

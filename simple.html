@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATS-Optimized Resume Builder - Rishabh Bairagi</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Base Resume Styles */
+        .resume-page {
+            font-family: 'Calibri', 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.4;
+            color: #111111;
+            position: relative;
+            background: #ffffff;
+            box-sizing: border-box;
+        }
+
+        /* Explicit Bullet Point Preservation for ATS PDF Rendering */
+        .resume-page ul {
+            margin-top: 4px;
+            margin-bottom: 4px;
+            padding-left: 20px;
+            list-style-type: disc !important;
+        }
+
+        .resume-page li {
+            display: list-item !important;
+            list-style-type: disc !important;
+            margin-bottom: 2px;
+        }
+
+        /* Custom subtle scrollbars for sidebars */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Strict Page & Print Optimization */
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        @media print {
+
+            html,
+            body {
+                background: white !important;
+                height: auto !important;
+                overflow: visible !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            #app-container,
+            #preview-container {
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
+                overflow: visible !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .print-area {
+                width: 210mm !important;
+                min-height: 297mm !important;
+                margin: 0 auto !important;
+                padding: 15mm !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800 h-screen overflow-hidden flex flex-col relative">
+
+    <!-- FLOATING ACTION BUTTON (FAB) -->
+    <button onclick="window.print()"
+        class="no-print fixed bottom-6 right-8 z-50 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-medium px-5 py-3.5 rounded-full shadow-2xl flex items-center gap-2.5 transition duration-200 text-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        </svg>
+        <span>Export PDF</span>
+    </button>
+
+    <!-- Main Workspace (Full Viewport Height) -->
+    <div id="app-container"
+        class="max-w-[1600px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 h-screen overflow-hidden">
+
+        <!-- FORM EDITOR SIDEBAR (LEFT - INDEPENDENT SCROLL) -->
+        <div
+            class="lg:col-span-5 bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-6 h-full overflow-y-auto custom-scroll no-print">
+            <h2 class="text-lg font-bold border-b pb-2 text-slate-800">Resume Details</h2>
+
+            <!-- Contact Info -->
+            <section class="space-y-3">
+                <h3 class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Contact Information</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <input type="text" id="in-name" placeholder="Full Name"
+                        class="border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
+                        oninput="updateResume()">
+                    <input type="text" id="in-title" placeholder="Professional Title"
+                        class="border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
+                        oninput="updateResume()">
+                    <input type="text" id="in-email" placeholder="Email"
+                        class="border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
+                        oninput="updateResume()">
+                    <input type="text" id="in-phone" placeholder="Phone"
+                        class="border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
+                        oninput="updateResume()">
+                    <input type="text" id="in-location" placeholder="City, Country"
+                        class="border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
+                        oninput="updateResume()">
+                    <input type="text" id="in-github" placeholder="GitHub URL"
+                        class="border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
+                        oninput="updateResume()">
+                    <input type="text" id="in-linkedin" placeholder="LinkedIn URL"
+                        class="col-span-2 border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
+                        oninput="updateResume()">
+                </div>
+            </section>
+
+            <!-- Professional Summary -->
+            <section class="space-y-3">
+                <h3 class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Professional Summary</h3>
+                <textarea id="in-summary" rows="4"
+                    placeholder="Brief high-impact overview of your experience and key skillsets..."
+                    class="w-full border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
+                    oninput="updateResume()"></textarea>
+            </section>
+
+            <!-- Experience -->
+            <section class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Work Experience</h3>
+                    <button onclick="addExperience()"
+                        class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded font-medium">+
+                        Add</button>
+                </div>
+                <div id="exp-form-list" class="space-y-4"></div>
+            </section>
+
+            <!-- Education -->
+            <section class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Education</h3>
+                    <button onclick="addEducation()"
+                        class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded font-medium">+
+                        Add</button>
+                </div>
+                <div id="edu-form-list" class="space-y-4"></div>
+            </section>
+
+            <!-- Skills -->
+            <section class="space-y-3">
+                <h3 class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Skills</h3>
+                <input type="text" id="in-skills-tech" placeholder="Core Development Skills (Comma separated)"
+                    class="w-full border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none mb-2"
+                    oninput="updateResume()">
+                <input type="text" id="in-skills-tools" placeholder="Architecture & Tools (Comma separated)"
+                    class="w-full border p-2 text-sm rounded focus:ring-1 focus:ring-blue-500 outline-none"
+                    oninput="updateResume()">
+            </section>
+        </div>
+
+        <!-- LIVE PREVIEW SIDEBAR (RIGHT - INDEPENDENT SCROLL) -->
+        <div id="preview-container"
+            class="lg:col-span-7 flex justify-center items-start h-full overflow-y-auto custom-scroll pb-10">
+            <div id="resume-preview"
+                class="print-area resume-page w-full max-w-[800px] bg-white p-10 rounded shadow-md border border-gray-200 min-h-[1050px] relative overflow-hidden">
+
+                <!-- RESUME CONTENT LAYER -->
+                <div class="relative z-10">
+                    <!-- Header -->
+                    <div class="text-center border-b pb-3.5 mb-4">
+                        <h1 id="out-name" class="text-2xl font-bold uppercase tracking-wider">RISHABH BAIRAGI</h1>
+                        <p id="out-title" class="text-md font-medium text-gray-700 mt-0.5">Mobile Engineer | Flutter &
+                            Clean Architecture</p>
+                        <div id="out-contact" class="text-xs text-gray-600 mt-2 space-x-1">
+                            <span id="out-email">rishabh.bairagi.136@gmail.com</span> |
+                            <span id="out-phone">+91 9340062808</span> |
+                            <span id="out-location">Neemuch, MP, India</span> |
+                            <span id="out-github">github.com/rishabvsnv</span> |
+                            <span id="out-linkedin">linkedin.com/in/rishab-vaishnav</span>
+                        </div>
+                    </div>
+
+                    <!-- Summary Section -->
+                    <div class="mb-4">
+                        <h2 class="text-sm font-bold uppercase border-b border-gray-400 pb-1 mb-1.5 tracking-wide">
+                            Professional Summary</h2>
+                        <p id="out-summary" class="text-xs leading-relaxed text-gray-800 text-justify">
+                            Mobile Product Engineer with experience building production-ready Flutter applications using
+                            REST APIs, Riverpod, and scalable architecture patterns. Skilled in backend integration,
+                            state management, caching, performance optimization, and reliable mobile application
+                            development.
+                        </p>
+                    </div>
+
+                    <!-- Experience Section -->
+                    <div class="mb-4">
+                        <h2 class="text-sm font-bold uppercase border-b border-gray-400 pb-1 mb-2 tracking-wide">Work
+                            Experience</h2>
+                        <div id="out-experience-list" class="space-y-3.5"></div>
+                    </div>
+
+                    <!-- Education Section -->
+                    <div class="mb-4">
+                        <h2 class="text-sm font-bold uppercase border-b border-gray-400 pb-1 mb-2 tracking-wide">
+                            Education</h2>
+                        <div id="out-education-list" class="space-y-2"></div>
+                    </div>
+
+                    <!-- Skills Section -->
+                    <div>
+                        <h2 class="text-sm font-bold uppercase border-b border-gray-400 pb-1 mb-2 tracking-wide">Skills
+                            & Proficiencies</h2>
+                        <div class="text-xs space-y-1">
+                            <div><strong class="font-semibold">Core Skills:</strong> <span id="out-skills-tech">Flutter
+                                    UI (Material Design), Dart, Riverpod, Ionic Framework (React), REST APIs, JSON
+                                    Parsing</span></div>
+                            <div><strong class="font-semibold">Architecture & Backend:</strong> <span
+                                    id="out-skills-tools">Service-Layer Architecture, Clean Architecture, Supabase,
+                                    Strapi, WordPress, Caching, Git</span></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Profile Data Models
+        let experiences = [
+            {
+                role: 'Flutter Developer',
+                company: 'MySchoolio',
+                location: 'Neemuch, India',
+                dates: 'Jan 2025 – Present',
+                bullets: 'Developed modular reusable Flutter UI components improving development efficiency.\nIntegrated and optimized 20+ REST API endpoints with caching and session refresh handling.\nImplemented Riverpod-based state management reducing stale authentication state issues.\nImproved app reliability through offline handling and resilient network error management.'
+            },
+            {
+                role: 'Flutter Developer',
+                company: 'easySIM (OCEAN GROUP)',
+                location: 'Neemuch, India',
+                dates: 'Oct 2024 – Dec 2024',
+                bullets: 'Developed a mobile application for SIM-related service management.\nIntegrated backend APIs and developed responsive Flutter UI components.\nImplemented structured architecture and reliable error handling.'
+            },
+            {
+                role: 'Flutter Developer',
+                company: 'Dollorinfotech Pvt Ltd',
+                location: 'Neemuch, MP, India',
+                dates: 'July 2024 – Sept 2024',
+                bullets: 'Developed Dolfin, a Flutter-based customer ledger app (similar to Khatabook).\nBuilt core modules: customer list, transactions, debit/credit, balances, search & filtering.\nIntegrated REST APIs and handled real-world network scenarios in UI.\nImplemented validations, reusable components, and performance optimizations.'
+            },
+            {
+                role: 'Frontend Engineer',
+                company: 'OKLABS',
+                location: 'Neemuch, MP, India',
+                dates: 'Feb 2024 – July 2024',
+                bullets: 'Developed responsive UI components using HTML, CSS, Bootstrap, and JavaScript.\nIntegrated REST APIs with proper UI state handling.\nImproved session handling and state refresh during logout and login flows.\nFollowed a service-layer architecture to improve frontend maintainability.'
+            }
+        ];
+
+        let education = [
+            {
+                degree: 'Bachelor of Computer Application (BCA) - 71.91%',
+                school: 'Gyanodaya Group of Management & Technology',
+                location: 'Neemuch, India',
+                dates: '2024 – 2026'
+            }
+        ];
+
+        // Application Initialization
+        window.onload = () => {
+            document.getElementById('in-name').value = "RISHABH BAIRAGI";
+            document.getElementById('in-title').value = "Mobile Engineer | Flutter & Clean Architecture";
+            document.getElementById('in-email').value = "rishabh.bairagi.136@gmail.com";
+            document.getElementById('in-phone').value = "+91 9340062808";
+            document.getElementById('in-location').value = "Neemuch, MP, India";
+            document.getElementById('in-github').value = "https://github.com/rishabvsnv";
+            document.getElementById('in-linkedin').value = "https://linkedin.com/in/rishab-vaishnav";
+            document.getElementById('in-summary').value = "Mobile Product Engineer with experience building production-ready Flutter applications using REST APIs, Riverpod, and scalable architecture patterns. Skilled in backend integration, state management, caching, performance optimization, and reliable mobile application development.";
+            document.getElementById('in-skills-tech').value = "Flutter UI (Material Design), Dart, Riverpod, Ionic Framework (React), REST APIs, JSON Parsing & Data Mapping";
+            document.getElementById('in-skills-tools').value = "Service-Layer Architecture, Clean Architecture, Supabase, Strapi, WordPress, Caching, Git, HTML/CSS/Bootstrap";
+
+            renderExperienceForms();
+            renderEducationForms();
+            updateResume();
+        };
+
+        // Render Dynamic Input Forms
+        function renderExperienceForms() {
+            const container = document.getElementById('exp-form-list');
+            container.innerHTML = '';
+            experiences.forEach((exp, index) => {
+                container.innerHTML += `
+                    <div class="p-3 border rounded bg-gray-50 space-y-2 relative">
+                        <button onclick="removeExperience(${index})" class="absolute top-2 right-2 text-red-500 text-xs font-bold hover:underline">Delete</button>
+                        <input type="text" value="${exp.role}" placeholder="Role / Title" class="w-full border p-1.5 text-xs rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="experiences[${index}].role = this.value; updateResume();">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" value="${exp.company}" placeholder="Company" class="border p-1.5 text-xs rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="experiences[${index}].company = this.value; updateResume();">
+                            <input type="text" value="${exp.location}" placeholder="Location" class="border p-1.5 text-xs rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="experiences[${index}].location = this.value; updateResume();">
+                        </div>
+                        <input type="text" value="${exp.dates}" placeholder="Dates" class="w-full border p-1.5 text-xs rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="experiences[${index}].dates = this.value; updateResume();">
+                        <textarea placeholder="Bullet points (one per line)" rows="3" class="w-full border p-1.5 text-xs rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="experiences[${index}].bullets = this.value; updateResume();">${exp.bullets}</textarea>
+                    </div>
+                `;
+            });
+        }
+
+        function renderEducationForms() {
+            const container = document.getElementById('edu-form-list');
+            container.innerHTML = '';
+            education.forEach((edu, index) => {
+                container.innerHTML += `
+                    <div class="p-3 border rounded bg-gray-50 space-y-2 relative">
+                        <button onclick="removeEducation(${index})" class="absolute top-2 right-2 text-red-500 text-xs font-bold hover:underline">Delete</button>
+                        <input type="text" value="${edu.degree}" placeholder="Degree / Certificate" class="w-full border p-1.5 text-xs rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="education[${index}].degree = this.value; updateResume();">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" value="${edu.school}" placeholder="School / University" class="border p-1.5 text-xs rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="education[${index}].school = this.value; updateResume();">
+                            <input type="text" value="${edu.location}" placeholder="Location" class="border p-1.5 text-xs rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="education[${index}].location = this.value; updateResume();">
+                        </div>
+                        <input type="text" value="${edu.dates}" placeholder="Dates" class="w-full border p-1.5 text-xs rounded focus:ring-1 focus:ring-blue-500 outline-none" oninput="education[${index}].dates = this.value; updateResume();">
+                    </div>
+                `;
+            });
+        }
+
+        function addExperience() {
+            experiences.push({ role: '', company: '', location: '', dates: '', bullets: '' });
+            renderExperienceForms();
+            updateResume();
+        }
+
+        function removeExperience(index) {
+            experiences.splice(index, 1);
+            renderExperienceForms();
+            updateResume();
+        }
+
+        function addEducation() {
+            education.push({ degree: '', school: '', location: '', dates: '' });
+            renderEducationForms();
+            updateResume();
+        }
+
+        function removeEducation(index) {
+            education.splice(index, 1);
+            renderEducationForms();
+            updateResume();
+        }
+
+        // Main Synchronous UI Render Function
+        function updateResume() {
+            // Personal Details Updates
+            document.getElementById('out-name').innerText = document.getElementById('in-name').value || "YOUR NAME";
+            document.getElementById('out-title').innerText = document.getElementById('in-title').value;
+            document.getElementById('out-email').innerText = document.getElementById('in-email').value;
+            document.getElementById('out-phone').innerText = document.getElementById('in-phone').value;
+            document.getElementById('out-location').innerText = document.getElementById('in-location').value;
+
+            const githubVal = document.getElementById('in-github').value;
+            document.getElementById('out-github').innerText = githubVal.replace(/^https?:\/\//, '');
+
+            const linkedinVal = document.getElementById('in-linkedin').value;
+            document.getElementById('out-linkedin').innerText = linkedinVal.replace(/^https?:\/\//, '');
+
+            document.getElementById('out-summary').innerText = document.getElementById('in-summary').value;
+
+            // Experience Rendering with Non-wrapping Dates
+            const expOutput = document.getElementById('out-experience-list');
+            expOutput.innerHTML = '';
+            experiences.forEach(exp => {
+                const bulletList = exp.bullets.split('\n').filter(b => b.trim() !== '').map(b => `<li class="text-xs leading-relaxed text-gray-800">${b.trim()}</li>`).join('');
+                expOutput.innerHTML += `
+                    <div>
+                        <div class="flex justify-between font-bold text-xs items-baseline">
+                            <span>${exp.role || 'Job Title'} <span class="font-normal italic">| ${exp.company || 'Company Name'}</span></span>
+                            <span class="whitespace-nowrap font-medium text-gray-700">${exp.dates || 'Dates'}</span>
+                        </div>
+                        <div class="text-[11px] text-gray-500 mb-1">${exp.location || ''}</div>
+                        <ul class="space-y-0.5">${bulletList}</ul>
+                    </div>
+                `;
+            });
+
+            // Education Rendering
+            const eduOutput = document.getElementById('out-education-list');
+            eduOutput.innerHTML = '';
+            education.forEach(edu => {
+                eduOutput.innerHTML += `
+                    <div class="flex justify-between text-xs items-baseline">
+                        <div>
+                            <strong class="font-bold">${edu.degree || 'Degree'}</strong>, ${edu.school || 'School'} <span class="text-gray-500 text-[11px]">(${edu.location || ''})</span>
+                        </div>
+                        <div class="font-medium whitespace-nowrap text-gray-700">${edu.dates || ''}</div>
+                    </div>
+                `;
+            });
+
+            // Skills Rendering
+            document.getElementById('out-skills-tech').innerText = document.getElementById('in-skills-tech').value;
+            document.getElementById('out-skills-tools').innerText = document.getElementById('in-skills-tools').value;
+        }
+    </script>
+</body>
+
+</html>
